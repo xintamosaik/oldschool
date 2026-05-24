@@ -77,10 +77,5 @@ function print_todos_table(array $todos): void
 
 }
 
-$todos = read_and_validate_todo_json();
-if (empty($todos)) {
-    echo "error";
-} else {
-    print_todos_table($todos);
-}
+
 ?>
