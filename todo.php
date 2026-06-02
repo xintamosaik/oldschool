@@ -53,6 +53,7 @@ function print_todos_table(array $todos): void
         return;
     }
     ?>
+    <a href="/new">new</a>
     <table>
         <thead>
             <tr>
