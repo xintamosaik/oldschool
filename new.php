@@ -6,3 +6,4 @@
     <input type="submit">
     <a href="/">back</a>
 </form>
+<?php

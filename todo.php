@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-
+define("TODO_FILE",     "todo.json");
 function validate_todo_item(object $item): bool
 {
     if (!is_object($item)) {
@@ -12,13 +12,13 @@ function validate_todo_item(object $item): bool
 function read_and_validate_todo_json(): array|null
 {
     // var_dump($_SERVER);
-    $file_name = 'todo.json';
-    $myfile = fopen($file_name, "r");
+ 
+    $myfile = fopen(TODO_FILE, "r");
     if (!$myfile) {
         echo "file could not be found";
         return null;
     }
-    $content = fread($myfile, filesize($file_name));
+    $content = fread($myfile, filesize(TODO_FILE));
     if ($content === false) {
         echo "no content in file";
         return null;
@@ -78,5 +78,32 @@ function print_todos_table(array $todos): void
 
 }
 
+function show_todos()
+{
+        $todos = read_and_validate_todo_json();
+        if (empty($todos)) {
+                echo "error";
+        } else {
+                print_todos_table($todos);
+        }
+}
 
+function save_todos(array $todos): void
+{
+    $file = fopen(TODO_FILE,"w");
+    fwrite($file, json_encode($todos, JSON_PRETTY_PRINT));
+    fclose($file);
+}
+
+function add_todo($title): void  {
+    $todos = read_and_validate_todo_json();
+    $count = (int) count($todos);
+    $new = array(
+        "id" => (string) $count + 1,
+        "title" => $title,
+    );
+    array_push($todos, $new);
+    print_r($todos);
+    save_todos($todos);
+}
 ?>
