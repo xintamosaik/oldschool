@@ -13,10 +13,7 @@ type Todo struct {
 	Done  bool
 }
 
-type TodoPageData struct {
-	PageTitle string
-	Todos     []Todo
-}
+
 
 func main() {
 	var addr string
@@ -46,17 +43,19 @@ func main() {
 	fs := http.FileServer(http.Dir("static/"))
 	mux.Handle("GET /static/", http.StripPrefix("/static/", fs))
 
-	tmpl := template.Must(template.ParseFiles("todos.html"))
+	todos := template.Must(template.Must(base.Clone()).ParseFiles("todos.html"))
 	mux.HandleFunc("GET /todos", func(w http.ResponseWriter, r *http.Request) {
-		data := TodoPageData{
-			PageTitle: "My TODO list",
-			Todos: []Todo{
+		data :=   []Todo{
 				{Title: "Task 1", Done: false},
 				{Title: "Task 2", Done: true},
 				{Title: "Task 3", Done: true},
-			},
+			 
 		}
-		tmpl.Execute(w, data)
+	 
+		todos.ExecuteTemplate(w, "base.html", map[string]any{
+			"Title": "Home",
+			"Todos": data,
+		})
 	})
 	log.Printf("Listening on %s", addr)
 	
