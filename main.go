@@ -13,8 +13,6 @@ type Todo struct {
 	Done  bool
 }
 
-
-
 func main() {
 	var addr string
 
@@ -45,19 +43,18 @@ func main() {
 
 	todos := template.Must(template.Must(base.Clone()).ParseFiles("todos.html"))
 	mux.HandleFunc("GET /todos", func(w http.ResponseWriter, r *http.Request) {
-		data :=   []Todo{
-				{Title: "Task 1", Done: false},
-				{Title: "Task 2", Done: true},
-				{Title: "Task 3", Done: true},
-			 
+		data := []Todo{
+			{Title: "Task 1", Done: false},
+			{Title: "Task 2", Done: true},
+			{Title: "Task 3", Done: true},
 		}
-	 
+
 		todos.ExecuteTemplate(w, "base.html", map[string]any{
 			"Title": "Home",
 			"Todos": data,
 		})
 	})
 	log.Printf("Listening on %s", addr)
-	
+
 	http.ListenAndServe(addr, mux)
 }
