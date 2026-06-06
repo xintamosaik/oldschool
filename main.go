@@ -1,40 +1,19 @@
 package main
 
 import (
-	"flag"
-
-	"html/template"
-	"log"
 	"net/http"
+
+	"github.com/a-h/templ"
 )
 
-type Todo struct {
-	Title string
-	Done  bool
-}
-
 func main() {
-	var addr string
-
-	flag.StringVar(&addr, "addr", ":8000", "listen address")
-
-	flag.Parse()
-
-	mux := http.NewServeMux()
-		fs := http.FileServer(http.Dir("static/"))
-	mux.Handle("GET /static/", http.StripPrefix("/static/", fs))
-
-
-	// Parse all the layouts
-	base := template.Must(template.ParseGlob("base.html"))
-	
-	mux.HandleFunc("GET /", reactHome(base))
-	mux.HandleFunc("GET /todos", reactTodos(base))
-	
+	http.Handle("/hello", templ.Handler(hello()))
 
 	
-	
-	log.Printf("Listening on %s", addr)
 
-	http.ListenAndServe(addr, mux)
+	http.Handle("/", templ.Handler(timeComponent(time.Now())))
+	http.Handle("/404", templ.Handler(notFoundComponent(), templ.WithStatus(http.StatusNotFound)))
+
+	http.ListenAndServe(":8080", nil)
 }
+
