@@ -26,9 +26,9 @@ func main() {
 		index.Execute(w, homeHTML)
 	})
 
-	http.HandleFunc("/cv/edit/name", handleEditName)
+	
 
-	http.HandleFunc("/cv/update/name", handleUpdateName)
+	
 
 	http.ListenAndServe(":8080", nil)
 }

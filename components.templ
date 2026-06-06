@@ -1,12 +1,22 @@
 package main
 
-import "net/http"
+import (
+	"log"
+	"net/http"
+)
 
 var name = "Ulf Dellbruegge"
+
+type Reaction struct {
+	url      string
+	callback func(w http.ResponseWriter, r *http.Request)
+}
 
 func handleEditName(w http.ResponseWriter, r *http.Request) {
 	CVEditName(name).Render(r.Context(), w)
 }
+
+var EditName = Reaction{"/cv/edit/name", handleEditName}
 
 templ CVEditName(old string) {
 	<form hx-post="/cv/update/name" hx-target="form" hx-swap="outerHTML">
@@ -22,6 +32,12 @@ func handleUpdateName(w http.ResponseWriter, r *http.Request) {
 
 templ CVShowName(current string) {
 	<span hx-post="/cv/edit/name" hx-trigger="click" hx-swap="outerHTML">{ current } </span>
+}
+
+func init() {
+	log.Printf("ya auto")
+	http.HandleFunc(EditName.url, EditName.callback)
+	http.HandleFunc("/cv/update/name", handleUpdateName)
 }
 
 templ Title() {
