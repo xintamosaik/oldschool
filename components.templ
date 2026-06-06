@@ -1,6 +1,9 @@
 package main
 
-import "time"
+import (
+	"time"
+	"strconv"
+)
 
 templ hello() {
 	<div>Hello</div>
@@ -12,4 +15,27 @@ templ timeComponent(d time.Time) {
 
 templ notFoundComponent() {
 	<div>404 - Not found</div>
+}
+
+templ counts(global, session int) {
+	<form id="countsForm" action="/" method="POST" hx-post="/" hx-select="#countsForm" hx-swap="outerHTML">
+		<div class="columns">
+			<div class={ "column", "has-text-centered", "is-primary" }>
+				<h1 class="title is-size-1 has-text-centered">{ strconv.Itoa(global) }</h1>
+				<p class="subtitle has-text-centered">Global</p>
+				<div><button class="button is-primary" type="submit" name="global" value="global">+1</button></div>
+			</div>
+			<div class={ "column", "has-text-centered" }>
+				<h1 class="title is-size-1 has-text-centered">{ strconv.Itoa(session) }</h1>
+				<p class="subtitle has-text-centered">Session</p>
+				<div><button class="button is-secondary" type="submit" name="session" value="session">+1</button></div>
+			</div>
+		</div>
+	</form>
+}
+
+templ greeting() {
+	<div>Hello, World!</div>
+	<p>You need JS</p>
+        <button hx-post="/clicked">Click me</button>
 }
