@@ -1,9 +1,17 @@
 package main
+templ CVEditName(old string) {
+	<form hx-post="/cv/update/name" hx-target="form" hx-swap="outerHTML">
+		<input name="name" id="name" value={ old }/>
+	</form>
+}
 
+templ CVShowName(current string) {
+	<span hx-post="/cv/edit/name" hx-trigger="click" hx-swap="outerHTML"> { current } </span>
+}
 templ Title() {
 	<section id="title">
 		<h1>
-			<span>Ulf Dellbrügge</span>
+			@CVShowName("Ulf Dellbruegge")
 			<span class="dash"></span>
 			<span>SOFTWARE ENGINEER (FULL-STACK / TYPESCRIPT)</span>
 		</h1>

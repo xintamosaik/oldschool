@@ -6,8 +6,10 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	 
 
 )
+var name = "Ulf Dellbruegge"
 
 func main() {
 	fs := http.FileServer(http.Dir("static/"))
@@ -25,8 +27,15 @@ func main() {
 		index.Execute(w, homeHTML)
 	})
 
-	http.HandleFunc("/todo/new", func(w http.ResponseWriter, r *http.Request) {
-		TodoNew().Render(r.Context(), w)
+	http.HandleFunc("/cv/edit/name", func(w http.ResponseWriter, r *http.Request) {
+		CVEditName(name).Render(r.Context(), w)
 	})
+
+	http.HandleFunc("/cv/update/name", func(w http.ResponseWriter, r *http.Request) {
+		new := r.FormValue("name")
+	
+		CVShowName(new).Render(r.Context(), w)
+	})
+
 	http.ListenAndServe(":8080", nil)
 }
