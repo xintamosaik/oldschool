@@ -18,7 +18,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to convert to html: %v", err)
 	}
-
 	
 	index := template.Must(template.ParseFiles("index.html"))
 
