@@ -6,15 +6,15 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"time"
+
 )
 
 func main() {
 	fs := http.FileServer(http.Dir("static/"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	templComponent := greeting()
-	html, err := templ.ToGoHTML(context.Background(), templComponent)
+	home := Home()
+	homeHTML, err := templ.ToGoHTML(context.Background(), home)
 	if err != nil {
 		log.Fatalf("failed to convert to html: %v", err)
 	}
@@ -22,17 +22,11 @@ func main() {
 	index := template.Must(template.ParseFiles("index.html"))
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		index.Execute(w, html)
+		index.Execute(w, homeHTML)
 	})
 
-	http.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
-		hello().Render(r.Context(), w)
+	http.HandleFunc("/todo/new", func(w http.ResponseWriter, r *http.Request) {
+		TodoNew().Render(r.Context(), w)
 	})
-	http.HandleFunc("/clicked", func(w http.ResponseWriter, r *http.Request) {
-		counts(2, 2).Render(r.Context(), w)
-	})
-	http.Handle("/time", templ.Handler(timeComponent(time.Now())))
-	http.Handle("/404", templ.Handler(notFoundComponent(), templ.WithStatus(http.StatusNotFound)))
-
 	http.ListenAndServe(":8080", nil)
 }

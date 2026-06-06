@@ -1,48 +1,12 @@
 package main
 
-import (
-	"time"
-	"strconv"
-)
-
-templ hello() {
-	<div>Hello</div>
-}
-
-templ timeComponent(d time.Time) {
-	<div>{ d.String() }</div>
-}
-
-templ notFoundComponent() {
-	<div>404 - Not found</div>
-}
-
-templ counts(global, session int) {
-	<form id="countsForm" action="/" method="POST" hx-post="/" hx-select="#countsForm" hx-swap="outerHTML">
-		<div>
-			<div>
-				<h1>{ strconv.Itoa(global) }</h1>
-				<p>Global</p>
-				<div>
-					<button class="button is-primary" type="submit" name="global" value="global">+1</button>
-				</div>
-			</div>
-			<div>
-				<h1>{ strconv.Itoa(session) }</h1>
-				<p>Session</p>
-				<div>
-					<button class="button is-secondary" type="submit" name="session" value="session">+1</button>
-				</div>
-			</div>
-		</div>
-	</form>
-}
-
-templ greeting() {
+ 
+templ Home() {
 	<div>Hello, World!</div>
-	<p>You need JS</p>
-        <button hx-get="/clicked">Click me</button>
-	<button hx-get="/hello">hi</button>
-	<button hx-get="/time">how late</button>
+	<button hx-get="/todo/new" hx-target="body">new</button>
+}
 
+templ TodoNew() {
+	<div>new</div>
+	<button hx-get="/" hx-target="body">back</button>
 }
