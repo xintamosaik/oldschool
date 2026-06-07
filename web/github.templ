@@ -1,0 +1,33 @@
+package web
+
+import "net/http"
+
+var github = "https://github.com/xintamosaik"
+
+func handleEditGitHub(w http.ResponseWriter, r *http.Request) {
+	EditGitHub(github).Render(r.Context(), w)
+}
+
+templ EditGitHub(old string) {
+	<form hx-post="/cv/update/github" hx-target="form" hx-swap="outerHTML">
+		<input name="github" id="github" value={ old }/>
+	</form>
+}
+
+func handleUpdateGitHub(w http.ResponseWriter, r *http.Request) {
+	new := r.FormValue("github")
+	GitHub(new).Render(r.Context(), w)
+}
+
+templ GitHub(current string) {
+        <span>
+		<a hx-post="/cv/edit/github" hx-trigger="click" hx-swap="outerHTML" href={ current } target="_blank">
+			GitHub
+		</a>
+	</span>
+}
+
+func init() {
+	http.HandleFunc("/cv/edit/github", handleEditGitHub)
+	http.HandleFunc("/cv/update/github", handleUpdateGitHub)
+}
