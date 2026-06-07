@@ -1,0 +1,33 @@
+package web
+
+import "net/http"
+
+var linkedin = "https://www.linkedin.com/in/ulfdellbruegge/"
+
+func handleEditLinkedIn(w http.ResponseWriter, r *http.Request) {
+	EditLinkedIn(linkedin).Render(r.Context(), w)
+}
+
+templ EditLinkedIn(old string) {
+	<form hx-post="/cv/update/linkedin" hx-target="form" hx-swap="outerHTML">
+		<input name="linkedin" id="linkedin" value={ old }/>
+	</form>
+}
+
+func handleUpdateLinkedIn(w http.ResponseWriter, r *http.Request) {
+	new := r.FormValue("linkedin")
+	LinkedIn(new).Render(r.Context(), w)
+}
+
+templ LinkedIn(current string) {
+        <span>
+		<a hx-post="/cv/edit/linkedin" hx-trigger="click" hx-swap="outerHTML" href={ current } target="_blank">
+			LinkedIn
+		</a>
+	</span>
+}
+
+func init() {
+	http.HandleFunc("/cv/edit/linkedin", handleEditLinkedIn)
+	http.HandleFunc("/cv/update/linkedin", handleUpdateLinkedIn)
+}
