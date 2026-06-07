@@ -16,10 +16,10 @@ templ CVEditName(old string) {
 
 func handleUpdateName(w http.ResponseWriter, r *http.Request) {
 	new := r.FormValue("name")
-	CVShowName(new).Render(r.Context(), w)
+	Name(new).Render(r.Context(), w)
 }
 
-templ CVShowName(current string) {
+templ Name(current string) {
 	<span hx-post="/cv/edit/name" hx-trigger="click" hx-swap="outerHTML">{ current } </span>
 }
 

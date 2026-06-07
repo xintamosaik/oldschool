@@ -60,10 +60,10 @@ func CVEditName(old string) templ.Component {
 
 func handleUpdateName(w http.ResponseWriter, r *http.Request) {
 	new := r.FormValue("name")
-	CVShowName(new).Render(r.Context(), w)
+	Name(new).Render(r.Context(), w)
 }
 
-func CVShowName(current string) templ.Component {
+func Name(current string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
