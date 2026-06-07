@@ -1,6 +1,8 @@
-package main
+package web
 
 import (
+	"context"
+	"html/template"
 	"log"
 	"net/http"
 )
@@ -34,10 +36,26 @@ templ CVShowName(current string) {
 	<span hx-post="/cv/edit/name" hx-trigger="click" hx-swap="outerHTML">{ current } </span>
 }
 
-func init() {
+func Init() {
 	log.Printf("ya auto")
 	http.HandleFunc(EditName.url, EditName.callback)
 	http.HandleFunc("/cv/update/name", handleUpdateName)
+		fs := http.FileServer(http.Dir("static/"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	home := Home()
+	homeHTML, err := templ.ToGoHTML(context.Background(), home)
+	if err != nil {
+		log.Fatalf("failed to convert to html: %v", err)
+	}
+	
+	index := template.Must(template.ParseFiles("index.html"))
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		index.Execute(w, homeHTML)
+	})
+
+	http.ListenAndServe(":8080", nil)
 }
 
 templ Title() {
