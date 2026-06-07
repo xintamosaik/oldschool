@@ -1,11 +1,12 @@
 package web
-
+	
+import ("templeruins/core")
 templ Contact() {
 	<section id="contact">
 		<p>
 			@LinkedIn("https://www.linkedin.com/in/ulfdellbruegge/")
 			<span class="dash"></span>
-			@Email("ulfdellbruegge@gmail.com")
+			@Email(core.EmailRead())
 			<span class="dash"></span>
 			@GitHub("https://github.com/xintamosaik")
 		</p>

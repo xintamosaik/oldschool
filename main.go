@@ -1,8 +1,8 @@
 package main
 
 import (
-	"templeruins/web"
 	"templeruins/persistence/files"
+	"templeruins/web"
 )
 
 func main() {

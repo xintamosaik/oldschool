@@ -11,7 +11,7 @@ func EmailSave() {
 
 }
 
-func EmailRead() {
+func EmailRead() string {
 	// Open the file
 	file, err := os.Open(data_path + "email.txt")
 	if err != nil {
@@ -26,10 +26,16 @@ func EmailRead() {
 	for scanner.Scan() {
 		line := scanner.Text() // Get the line as a string
 		fmt.Println(line)
+		
+		if (len(line) > 5) {
+			return line
+		}
+		
 	}
 
 	// Check for errors during the scan
 	if err := scanner.Err(); err != nil {
 		log.Fatalf("error reading file: %s", err)
 	}
+	return ""
 }

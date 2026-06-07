@@ -1,8 +1,12 @@
 package web
 
-import "net/http"
+import (
+	"net/http"
+ 
+	"templeruins/core"
+)
 
-var email = "ulfdellbruegge@gmail.com"
+var email = core.EmailRead()
 
 func handleEditEmail(w http.ResponseWriter, r *http.Request) {
 	EditEmail(email).Render(r.Context(), w)
@@ -15,14 +19,15 @@ templ EditEmail(old string) {
 }
 
 func handleUpdateEmail(w http.ResponseWriter, r *http.Request) {
-	new := r.FormValue("email")
-	Email(new).Render(r.Context(), w)
+	email = r.FormValue("email")
+	 
+	Email(email).Render(r.Context(), w)
 }
 
 templ Email(current string) {
 	<span>
 		<a hx-post="/cv/edit/email" hx-trigger="click" hx-swap="outerHTML" href={ "mailto:" + current }>
-			ulfdellbruegge@gmail.com
+			{ current }
 		</a>
 	</span>
 }
