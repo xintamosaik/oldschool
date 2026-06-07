@@ -1,0 +1,39 @@
+package web
+
+import "net/http"
+
+var subtitle = "Full-stack software engineer building reliable TypeScript, frontend, and backend systems"
+
+func handleEditSubtitle(w http.ResponseWriter, r *http.Request) {
+	EditSubtitle(subtitle).Render(r.Context(), w)
+}
+
+templ EditSubtitle(old string) {
+	<form hx-post="/cv/update/subtitle" hx-target="form" hx-swap="outerHTML">
+		<input name="subtitle" id="subtitle" value={ old }/>
+	</form>
+}
+
+func handleUpdateSubtitle(w http.ResponseWriter, r *http.Request) {
+	new := r.FormValue("subtitle")
+	Text(new).Render(r.Context(), w)
+}
+
+templ Text(current string) {
+	<span hx-post="/cv/edit/subtitle" hx-trigger="click" hx-swap="outerHTML">{ current }</span>
+}
+
+func init() {
+	http.HandleFunc("/cv/edit/subtitle", handleEditSubtitle)
+	http.HandleFunc("/cv/update/subtitle", handleUpdateSubtitle)
+}
+
+templ Subtitle() {
+	<section id="subtitle">
+		<p>
+			<strong>
+				@Text(subtitle)
+			</strong>
+		</p>
+	</section>
+}
