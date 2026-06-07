@@ -31,16 +31,3 @@ func Init() {
 	http.ListenAndServe(":8080", nil)
 }
 
-templ Home() {
-	<main>
-		@Title()
-		@Subtitle()
-		@Relocation()
-		@Contact()
-		@CommercialImpact()
-		@Summary()
-		@Experience()
-		@Skills()
-		@Education()
-	</main>
-}
