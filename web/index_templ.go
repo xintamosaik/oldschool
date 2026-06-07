@@ -21,7 +21,7 @@ type Reaction struct {
 }
 
 func Init() {
-	fs := http.FileServer(http.Dir("static/"))
+	fs := http.FileServer(http.Dir("web/static/"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	home := Home()
