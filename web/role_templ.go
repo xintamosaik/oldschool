@@ -10,13 +10,13 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "net/http"
 
-var name = "Ulf Dellbruegge"
+var role = "SOFTWARE ENGINEER (FULL-STACK / TYPESCRIPT)"
 
-func handleEditName(w http.ResponseWriter, r *http.Request) {
-	EditName(name).Render(r.Context(), w)
+func handleEditRole(w http.ResponseWriter, r *http.Request) {
+	EditRole(role).Render(r.Context(), w)
 }
 
-func EditName(old string) templ.Component {
+func EditRole(old string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -37,14 +37,14 @@ func EditName(old string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form hx-post=\"/cv/update/name\" hx-target=\"form\" hx-swap=\"outerHTML\"><input name=\"name\" id=\"name\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form hx-post=\"/cv/update/role\" hx-target=\"form\" hx-swap=\"outerHTML\"><input name=\"role\" id=\"role\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(old)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/name.templ`, Line: 13, Col: 42}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/role.templ`, Line: 13, Col: 42}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {
@@ -58,12 +58,12 @@ func EditName(old string) templ.Component {
 	})
 }
 
-func handleUpdateName(w http.ResponseWriter, r *http.Request) {
-	new := r.FormValue("name")
-	Name(new).Render(r.Context(), w)
+func handleUpdateRole(w http.ResponseWriter, r *http.Request) {
+	new := r.FormValue("role")
+	Role(new).Render(r.Context(), w)
 }
 
-func Name(current string) templ.Component {
+func Role(current string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -84,14 +84,14 @@ func Name(current string) templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<span hx-post=\"/cv/edit/name\" hx-trigger=\"click\" hx-swap=\"outerHTML\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<span hx-post=\"/cv/edit/role\" hx-trigger=\"click\" hx-swap=\"outerHTML\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(current)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/name.templ`, Line: 23, Col: 79}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/role.templ`, Line: 23, Col: 79}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -106,8 +106,8 @@ func Name(current string) templ.Component {
 }
 
 func init() {
-	http.HandleFunc("/cv/edit/name", handleEditName)
-	http.HandleFunc("/cv/update/name", handleUpdateName)
+	http.HandleFunc("/cv/edit/role", handleEditRole)
+	http.HandleFunc("/cv/update/role", handleUpdateRole)
 }
 
 var _ = templruntime.GeneratedTemplate

@@ -5,10 +5,10 @@ import "net/http"
 var name = "Ulf Dellbruegge"
 
 func handleEditName(w http.ResponseWriter, r *http.Request) {
-	CVEditName(name).Render(r.Context(), w)
+	EditName(name).Render(r.Context(), w)
 }
 
-templ CVEditName(old string) {
+templ EditName(old string) {
 	<form hx-post="/cv/update/name" hx-target="form" hx-swap="outerHTML">
 		<input name="name" id="name" value={ old }/>
 	</form>
@@ -20,7 +20,7 @@ func handleUpdateName(w http.ResponseWriter, r *http.Request) {
 }
 
 templ Name(current string) {
-	<span hx-post="/cv/edit/name" hx-trigger="click" hx-swap="outerHTML">{ current } </span>
+	<span hx-post="/cv/edit/name" hx-trigger="click" hx-swap="outerHTML">{ current }</span>
 }
 
 func init() {

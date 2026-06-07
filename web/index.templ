@@ -31,15 +31,6 @@ func Init() {
 	http.ListenAndServe(":8080", nil)
 }
 
-templ Title() {
-	<section id="title">
-		<h1>
-			@Name("Ulf Dellbruegge")
-			<span class="dash"></span>
-			<span>SOFTWARE ENGINEER (FULL-STACK / TYPESCRIPT)</span>
-		</h1>
-	</section>
-}
 
 templ Subtitle() {
 	<section id="subtitle">
