@@ -1,0 +1,29 @@
+package web
+
+import "net/http"
+
+var name = "Ulf Dellbruegge"
+
+func handleEditName(w http.ResponseWriter, r *http.Request) {
+	CVEditName(name).Render(r.Context(), w)
+}
+
+templ CVEditName(old string) {
+	<form hx-post="/cv/update/name" hx-target="form" hx-swap="outerHTML">
+		<input name="name" id="name" value={ old }/>
+	</form>
+}
+
+func handleUpdateName(w http.ResponseWriter, r *http.Request) {
+	new := r.FormValue("name")
+	CVShowName(new).Render(r.Context(), w)
+}
+
+templ CVShowName(current string) {
+	<span hx-post="/cv/edit/name" hx-trigger="click" hx-swap="outerHTML">{ current } </span>
+}
+
+func init() {
+	http.HandleFunc("/cv/edit/name", handleEditName)
+	http.HandleFunc("/cv/update/name", handleUpdateName)
+}

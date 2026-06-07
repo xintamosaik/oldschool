@@ -7,40 +7,13 @@ import (
 	"net/http"
 )
 
-var name = "Ulf Dellbruegge"
-
 type Reaction struct {
 	url      string
 	callback func(w http.ResponseWriter, r *http.Request)
 }
 
-func handleEditName(w http.ResponseWriter, r *http.Request) {
-	CVEditName(name).Render(r.Context(), w)
-}
-
-var EditName = Reaction{"/cv/edit/name", handleEditName}
-
-templ CVEditName(old string) {
-	<form hx-post="/cv/update/name" hx-target="form" hx-swap="outerHTML">
-		<input name="name" id="name" value={ old }/>
-	</form>
-}
-
-func handleUpdateName(w http.ResponseWriter, r *http.Request) {
-	new := r.FormValue("name")
-
-	CVShowName(new).Render(r.Context(), w)
-}
-
-templ CVShowName(current string) {
-	<span hx-post="/cv/edit/name" hx-trigger="click" hx-swap="outerHTML">{ current } </span>
-}
-
 func Init() {
-	log.Printf("ya auto")
-	http.HandleFunc(EditName.url, EditName.callback)
-	http.HandleFunc("/cv/update/name", handleUpdateName)
-		fs := http.FileServer(http.Dir("static/"))
+	fs := http.FileServer(http.Dir("static/"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	home := Home()

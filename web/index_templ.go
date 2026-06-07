@@ -15,113 +15,12 @@ import (
 	"net/http"
 )
 
-var name = "Ulf Dellbruegge"
-
 type Reaction struct {
 	url      string
 	callback func(w http.ResponseWriter, r *http.Request)
 }
 
-func handleEditName(w http.ResponseWriter, r *http.Request) {
-	CVEditName(name).Render(r.Context(), w)
-}
-
-var EditName = Reaction{"/cv/edit/name", handleEditName}
-
-func CVEditName(old string) templ.Component {
-	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
-			return templ_7745c5c3_CtxErr
-		}
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-		if !templ_7745c5c3_IsBuffer {
-			defer func() {
-				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err == nil {
-					templ_7745c5c3_Err = templ_7745c5c3_BufErr
-				}
-			}()
-		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var1 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var1 == nil {
-			templ_7745c5c3_Var1 = templ.NopComponent
-		}
-		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form hx-post=\"/cv/update/name\" hx-target=\"form\" hx-swap=\"outerHTML\"><input name=\"name\" id=\"name\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(old)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/index.templ`, Line: 25, Col: 42}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"></form>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		return nil
-	})
-}
-
-func handleUpdateName(w http.ResponseWriter, r *http.Request) {
-	new := r.FormValue("name")
-
-	CVShowName(new).Render(r.Context(), w)
-}
-
-func CVShowName(current string) templ.Component {
-	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
-			return templ_7745c5c3_CtxErr
-		}
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-		if !templ_7745c5c3_IsBuffer {
-			defer func() {
-				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err == nil {
-					templ_7745c5c3_Err = templ_7745c5c3_BufErr
-				}
-			}()
-		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var3 == nil {
-			templ_7745c5c3_Var3 = templ.NopComponent
-		}
-		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<span hx-post=\"/cv/edit/name\" hx-trigger=\"click\" hx-swap=\"outerHTML\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(current)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/index.templ`, Line: 36, Col: 79}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</span>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		return nil
-	})
-}
-
 func Init() {
-	log.Printf("ya auto")
-	http.HandleFunc(EditName.url, EditName.callback)
-	http.HandleFunc("/cv/update/name", handleUpdateName)
 	fs := http.FileServer(http.Dir("static/"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
@@ -156,12 +55,12 @@ func Title() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var5 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var5 == nil {
-			templ_7745c5c3_Var5 = templ.NopComponent
+		templ_7745c5c3_Var1 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var1 == nil {
+			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<section id=\"title\"><h1>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section id=\"title\"><h1>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -169,7 +68,7 @@ func Title() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<span class=\"dash\"></span> <span>SOFTWARE ENGINEER (FULL-STACK / TYPESCRIPT)</span></h1></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<span class=\"dash\"></span> <span>SOFTWARE ENGINEER (FULL-STACK / TYPESCRIPT)</span></h1></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -193,12 +92,12 @@ func Subtitle() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var6 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var6 == nil {
-			templ_7745c5c3_Var6 = templ.NopComponent
+		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var2 == nil {
+			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<section id=\"subtitle\"><p><strong>Full-stack software engineer building reliable TypeScript, frontend, and backend systems</strong></p></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<section id=\"subtitle\"><p><strong>Full-stack software engineer building reliable TypeScript, frontend, and backend systems</strong></p></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -222,12 +121,12 @@ func Contact1() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var7 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var7 == nil {
-			templ_7745c5c3_Var7 = templ.NopComponent
+		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var3 == nil {
+			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<section id=\"contact\"><p><span>Relocating to London (Skilled Worker visa route)</span> <span class=\"dash\"></span> <span>Open to sponsorship</span></p></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<section id=\"contact\"><p><span>Relocating to London (Skilled Worker visa route)</span> <span class=\"dash\"></span> <span>Open to sponsorship</span></p></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -251,12 +150,12 @@ func Contact2() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var8 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var8 == nil {
-			templ_7745c5c3_Var8 = templ.NopComponent
+		templ_7745c5c3_Var4 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var4 == nil {
+			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<section id=\"contact\"><p><span><a href=\"https://www.linkedin.com/in/ulfdellbruegge/\" target=\"_blank\">LinkedIn</a></span> <span class=\"dash\"></span> <span><a href=\"mailto:ulfdellbruegge@gmail.com\">ulfdellbruegge@gmail.com</a></span> <span class=\"dash\"></span> <span><a href=\"https://github.com/xintamosaik\" target=\"_blank\">github.com/xintamosaik</a></span></p></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<section id=\"contact\"><p><span><a href=\"https://www.linkedin.com/in/ulfdellbruegge/\" target=\"_blank\">LinkedIn</a></span> <span class=\"dash\"></span> <span><a href=\"mailto:ulfdellbruegge@gmail.com\">ulfdellbruegge@gmail.com</a></span> <span class=\"dash\"></span> <span><a href=\"https://github.com/xintamosaik\" target=\"_blank\">github.com/xintamosaik</a></span></p></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -280,12 +179,12 @@ func CommercialImpact() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var9 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var9 == nil {
-			templ_7745c5c3_Var9 = templ.NopComponent
+		templ_7745c5c3_Var5 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var5 == nil {
+			templ_7745c5c3_Var5 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<section id=\"commercial_impact\"><h2>Commercial Impact Highlights</h2><ul><li><strong>Replaced a 5,000+ LOC legacy AdController</strong> with a 60-line config-driven system → removed third-party dependency and enabled version-controlled deployments</li><li>Reduced delivery feedback loops from 3–5 minutes to under 1 second, accelerating iteration and release confidence</li><li>Cut bug rates ~20% in key workflows, improving system stability and stakeholder trust</li></ul></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<section id=\"commercial_impact\"><h2>Commercial Impact Highlights</h2><ul><li><strong>Replaced a 5,000+ LOC legacy AdController</strong> with a 60-line config-driven system → removed third-party dependency and enabled version-controlled deployments</li><li>Reduced delivery feedback loops from 3–5 minutes to under 1 second, accelerating iteration and release confidence</li><li>Cut bug rates ~20% in key workflows, improving system stability and stakeholder trust</li></ul></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -309,12 +208,12 @@ func Summary() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var10 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var10 == nil {
-			templ_7745c5c3_Var10 = templ.NopComponent
+		templ_7745c5c3_Var6 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var6 == nil {
+			templ_7745c5c3_Var6 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<section id=\"summary\"><h2>Summary</h2><p>Software Engineer experienced in TypeScript, JavaScript, React, Vue, Node.js, and containerised services. Strong track record of modernising legacy systems, improving delivery speed, and shipping maintainable production software.</p><p>Comfortable working across frontend, backend, tooling, and infrastructure, with experience in Dockerised microservice environments and complex legacy codebases.</p><p>Particularly effective in ambiguous environments where systems need to be understood, simplified, stabilised, and moved toward better engineering practices.</p></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<section id=\"summary\"><h2>Summary</h2><p>Software Engineer experienced in TypeScript, JavaScript, React, Vue, Node.js, and containerised services. Strong track record of modernising legacy systems, improving delivery speed, and shipping maintainable production software.</p><p>Comfortable working across frontend, backend, tooling, and infrastructure, with experience in Dockerised microservice environments and complex legacy codebases.</p><p>Particularly effective in ambiguous environments where systems need to be understood, simplified, stabilised, and moved toward better engineering practices.</p></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -338,25 +237,25 @@ func Experience() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var11 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var11 == nil {
-			templ_7745c5c3_Var11 = templ.NopComponent
+		templ_7745c5c3_Var7 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var7 == nil {
+			templ_7745c5c3_Var7 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<section id=\"experience\"><h2>Experience</h2><div class=\"job entry\"><h3><span>Software Engineer</span> <span class=\"dash\"></span> <span>iq digital media marketing gmbh</span></h3><h4><span>Jan 2024 - May 2025</span> <span class=\"dash\"></span> <span>Düsseldorf, Germany</span></h4><ul><li><p><strong>Reverse-engineered and replaced a 5,000-line legacy AdController</strong> with a ~60-line config-driven core — restored control over deployment, removed reliance on third-party TMS, enabled versioning, and laid the foundation for CI/CD and TypeScript-based development across ad tech infrastructure.</p></li><li><p><strong>Built the SkyMover system</strong> to unify ad positioning logic across 40+ client websites — replaced hundreds of scattered, error-prone layout scripts with a 100-line JS module, significantly reducing integration time per client and lowering ongoing maintenance overhead across 40+ revenue-generating websites.</p></li><li><p><strong>Architected and delivered a modern ad template builder</strong> using TypeScript and esbuild — replaced a fragile, manual system with import/export support, modular design, and a local test environment. Reduced feedback loop time from 3–5 minutes to under 1 second, enabling rapid iteration and future testing capabilities.</p></li><li><p><strong>Created internal DX tools</strong> including a test harness for templates, a URL builder to streamline QA workflows, and macro validation logic — significantly improved developer efficiency, reduced context-switching, and accelerated the migration of legacy templates.</p></li><li><p><strong>Drove culture shift toward engineering best practices</strong> by introducing TypeScript, ESLint, JSdoc, domain-based folder structures, and fast-feedback mindsets. Mentored junior teammates, led pair programming efforts, and helped reshape quality habits within a historically chaotic delivery environment.</p></li><li><p><strong>Supported development of a Chrome extension</strong>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<section id=\"experience\"><h2>Experience</h2><div class=\"job entry\"><h3><span>Software Engineer</span> <span class=\"dash\"></span> <span>iq digital media marketing gmbh</span></h3><h4><span>Jan 2024 - May 2025</span> <span class=\"dash\"></span> <span>Düsseldorf, Germany</span></h4><ul><li><p><strong>Reverse-engineered and replaced a 5,000-line legacy AdController</strong> with a ~60-line config-driven core — restored control over deployment, removed reliance on third-party TMS, enabled versioning, and laid the foundation for CI/CD and TypeScript-based development across ad tech infrastructure.</p></li><li><p><strong>Built the SkyMover system</strong> to unify ad positioning logic across 40+ client websites — replaced hundreds of scattered, error-prone layout scripts with a 100-line JS module, significantly reducing integration time per client and lowering ongoing maintenance overhead across 40+ revenue-generating websites.</p></li><li><p><strong>Architected and delivered a modern ad template builder</strong> using TypeScript and esbuild — replaced a fragile, manual system with import/export support, modular design, and a local test environment. Reduced feedback loop time from 3–5 minutes to under 1 second, enabling rapid iteration and future testing capabilities.</p></li><li><p><strong>Created internal DX tools</strong> including a test harness for templates, a URL builder to streamline QA workflows, and macro validation logic — significantly improved developer efficiency, reduced context-switching, and accelerated the migration of legacy templates.</p></li><li><p><strong>Drove culture shift toward engineering best practices</strong> by introducing TypeScript, ESLint, JSdoc, domain-based folder structures, and fast-feedback mindsets. Mentored junior teammates, led pair programming efforts, and helped reshape quality habits within a historically chaotic delivery environment.</p></li><li><p><strong>Supported development of a Chrome extension</strong>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var12 string
-		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs("for")
+		var templ_7745c5c3_Var8 string
+		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs("for")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/index.templ`, Line: 215, Col: 73}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/index.templ`, Line: 188, Col: 73}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, " PM and stakeholder visibility into ad setup status — contributed React and Chrome API guidance, improving internal transparency around campaign configuration.</p></li></ul></div><div class=\"job entry\"><h3><span>Software Engineer</span> <span class=\"dash\"></span> <span>aufinity Group GmbH</span></h3><h4><span>Sep 2025 - Now</span> <span class=\"dash\"></span> <span>Cologne, Germany</span></h4><ul><li>Delivered production changes across a Dockerised microservice platform using Vue, Fastify, MongoDB, Redis, and Kubernetes.</li><li>Developed and maintained frontend and backend services within a proprietary internal framework used across multiple services.</li><li>Reached full delivery velocity within weeks by quickly understanding the internal framework, service boundaries, and deployment workflow.</li><li>Implemented unit and integration tests in a JSDoc-typed JavaScript environment, improving confidence in service changes.</li><li>Contributed to containerised release workflows and Kubernetes-based deployments supporting reliable production delivery.</li></ul></div><div class=\"job entry\"><h3><span>Full Stack Developer</span> <span class=\"dash\"></span> <span>Qanuk GmbH</span></h3><h4><span>April 2021 - December 2023</span> <span class=\"dash\"></span> <span>Osnabrück, Niedersachsen, Germany</span></h4><ul><li><strong>Rebuilt an 8,000+ line legacy invoicing system</strong> into a modular WordPress plugin (q_invoice) using MVC architecture, domain/feature slicing, AJAX-based UX, and modern PHP practices. Achieved full feature parity in ~7 months, introduced multi-language support, custom tax handling, import/export logic, and reduced friction for business stakeholders through faster, dynamic interfaces.</li><li><strong>Designed and implemented a flexible internal reporting system</strong> (PHP + Chart.js) that enabled visual filtering across event types, cities, and date ranges — a key decision-making tool praised by the CEO for its usability and depth. Architected for extensibility, with lazy AJAX rendering and data-driven config logic.</li><li><strong>Reduced noise and instability in the admin panel</strong> by fixing 50–70 recurring PHP bugs and cleaning up thousands of warnings. Introduced a lightweight logging system with trace capabilities, restoring error log usability and giving the team visibility into regressions.</li><li><strong>Refactored scattered legacy code</strong> (PHP/JS) into modular components with clear boundaries — cutting bug rates by ~40% in key workflows and improving overall developer confidence and responsiveness.</li><li><strong>Took initiative to drive peer mentoring</strong> and code quality practices in a chaotic, process-light environment: introduced Discord-based pair programming sessions, launched informal review habits, and promoted better naming, structure, and JS/PHP linting across the team.</li><li><strong>Introduced WP_React, JSdoc, ESLint, and static PHP analysis tools</strong> to strengthen reliability and readability. Drove early Docker adoption to enable testability, though the team was not yet ready for full TDD.</li><li>Used Postman for API development, Adminer for SQL analysis, and  <strong>proactively learned unfamiliar tooling to support architectural improvements</strong> on the fly.</li></ul></div></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, " PM and stakeholder visibility into ad setup status — contributed React and Chrome API guidance, improving internal transparency around campaign configuration.</p></li></ul></div><div class=\"job entry\"><h3><span>Software Engineer</span> <span class=\"dash\"></span> <span>aufinity Group GmbH</span></h3><h4><span>Sep 2025 - Now</span> <span class=\"dash\"></span> <span>Cologne, Germany</span></h4><ul><li>Delivered production changes across a Dockerised microservice platform using Vue, Fastify, MongoDB, Redis, and Kubernetes.</li><li>Developed and maintained frontend and backend services within a proprietary internal framework used across multiple services.</li><li>Reached full delivery velocity within weeks by quickly understanding the internal framework, service boundaries, and deployment workflow.</li><li>Implemented unit and integration tests in a JSDoc-typed JavaScript environment, improving confidence in service changes.</li><li>Contributed to containerised release workflows and Kubernetes-based deployments supporting reliable production delivery.</li></ul></div><div class=\"job entry\"><h3><span>Full Stack Developer</span> <span class=\"dash\"></span> <span>Qanuk GmbH</span></h3><h4><span>April 2021 - December 2023</span> <span class=\"dash\"></span> <span>Osnabrück, Niedersachsen, Germany</span></h4><ul><li><strong>Rebuilt an 8,000+ line legacy invoicing system</strong> into a modular WordPress plugin (q_invoice) using MVC architecture, domain/feature slicing, AJAX-based UX, and modern PHP practices. Achieved full feature parity in ~7 months, introduced multi-language support, custom tax handling, import/export logic, and reduced friction for business stakeholders through faster, dynamic interfaces.</li><li><strong>Designed and implemented a flexible internal reporting system</strong> (PHP + Chart.js) that enabled visual filtering across event types, cities, and date ranges — a key decision-making tool praised by the CEO for its usability and depth. Architected for extensibility, with lazy AJAX rendering and data-driven config logic.</li><li><strong>Reduced noise and instability in the admin panel</strong> by fixing 50–70 recurring PHP bugs and cleaning up thousands of warnings. Introduced a lightweight logging system with trace capabilities, restoring error log usability and giving the team visibility into regressions.</li><li><strong>Refactored scattered legacy code</strong> (PHP/JS) into modular components with clear boundaries — cutting bug rates by ~40% in key workflows and improving overall developer confidence and responsiveness.</li><li><strong>Took initiative to drive peer mentoring</strong> and code quality practices in a chaotic, process-light environment: introduced Discord-based pair programming sessions, launched informal review habits, and promoted better naming, structure, and JS/PHP linting across the team.</li><li><strong>Introduced WP_React, JSdoc, ESLint, and static PHP analysis tools</strong> to strengthen reliability and readability. Drove early Docker adoption to enable testability, though the team was not yet ready for full TDD.</li><li>Used Postman for API development, Adminer for SQL analysis, and  <strong>proactively learned unfamiliar tooling to support architectural improvements</strong> on the fly.</li></ul></div></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -380,12 +279,12 @@ func Skills() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var13 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var13 == nil {
-			templ_7745c5c3_Var13 = templ.NopComponent
+		templ_7745c5c3_Var9 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var9 == nil {
+			templ_7745c5c3_Var9 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<section><h2>Skills</h2><ul><li><strong>Core Stack:</strong> TypeScript, JavaScript (ES6+), React, Vue, Node.js (Fastify)</li><li><strong>Infrastructure & DevOps:</strong> Docker, Kubernetes, GitHub Actions, GitLab CI, AWS, GCP</li><li><strong>Data & Storage:</strong> MongoDB, SQL (MySQL/PostgreSQL), ORM</li><li><strong>Tooling & Quality:</strong> ESLint, JSDoc, TDD/BDD, CI/CD, DevOps practices</li></ul></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<section><h2>Skills</h2><ul><li><strong>Core Stack:</strong> TypeScript, JavaScript (ES6+), React, Vue, Node.js (Fastify)</li><li><strong>Infrastructure & DevOps:</strong> Docker, Kubernetes, GitHub Actions, GitLab CI, AWS, GCP</li><li><strong>Data & Storage:</strong> MongoDB, SQL (MySQL/PostgreSQL), ORM</li><li><strong>Tooling & Quality:</strong> ESLint, JSDoc, TDD/BDD, CI/CD, DevOps practices</li></ul></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -409,12 +308,12 @@ func Education() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var14 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var14 == nil {
-			templ_7745c5c3_Var14 = templ.NopComponent
+		templ_7745c5c3_Var10 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var10 == nil {
+			templ_7745c5c3_Var10 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<section><h2>Education</h2><div class=\"education entry\"><h3><span>Master of Arts in Sociology</span> <span class=\"dash\"></span> <span>Universität Bielefeld</span></h3><h4><span>September 2021</span> <span class=\"dash\"></span> <span>Bielefeld, NRW, Germany</span></h4><p>Specialization: Qualitative Studies and Workplace Studies/Ethnomethodology</p></div></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<section><h2>Education</h2><div class=\"education entry\"><h3><span>Master of Arts in Sociology</span> <span class=\"dash\"></span> <span>Universität Bielefeld</span></h3><h4><span>September 2021</span> <span class=\"dash\"></span> <span>Bielefeld, NRW, Germany</span></h4><p>Specialization: Qualitative Studies and Workplace Studies/Ethnomethodology</p></div></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -438,12 +337,12 @@ func Home() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var15 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var15 == nil {
-			templ_7745c5c3_Var15 = templ.NopComponent
+		templ_7745c5c3_Var11 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var11 == nil {
+			templ_7745c5c3_Var11 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<main>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<main>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -483,7 +382,7 @@ func Home() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</main>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</main>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -507,12 +406,12 @@ func TodoNew() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var16 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var16 == nil {
-			templ_7745c5c3_Var16 = templ.NopComponent
+		templ_7745c5c3_Var12 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var12 == nil {
+			templ_7745c5c3_Var12 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "<div>new</div><button hx-get=\"/\" hx-target=\"body\">back</button>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<div>new</div><button hx-get=\"/\" hx-target=\"body\">back</button>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
