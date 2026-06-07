@@ -1,0 +1,33 @@
+package web
+
+import "net/http"
+
+var email = "https://email.com/xintamosaik"
+
+func handleEditEmail(w http.ResponseWriter, r *http.Request) {
+	EditEmail(email).Render(r.Context(), w)
+}
+
+templ EditEmail(old string) {
+	<form hx-post="/cv/update/email" hx-target="form" hx-swap="outerHTML">
+		<input name="email" id="email" value={ old }/>
+	</form>
+}
+
+func handleUpdateEmail(w http.ResponseWriter, r *http.Request) {
+	new := r.FormValue("email")
+	Email(new).Render(r.Context(), w)
+}
+
+templ Email(current string) {
+	<span>
+		<a hx-post="/cv/edit/email" hx-trigger="click" hx-swap="outerHTML" href={ "mailto:" + current }>
+			ulfdellbruegge@gmail.com
+		</a>
+	</span>
+}
+
+func init() {
+	http.HandleFunc("/cv/edit/email", handleEditEmail)
+	http.HandleFunc("/cv/update/email", handleUpdateEmail)
+}
