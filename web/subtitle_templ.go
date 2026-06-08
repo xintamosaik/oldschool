@@ -9,8 +9,9 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import "net/http"
+import "templeruins/core"
 
-var subtitle = "Full-stack software engineer building reliable TypeScript, frontend, and backend systems"
+var subtitle = core.SubtitleRead()
 
 func handleEditSubtitle(w http.ResponseWriter, r *http.Request) {
 	EditSubtitle(subtitle).Render(r.Context(), w)
@@ -44,7 +45,7 @@ func EditSubtitle(old string) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(old)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/subtitle.templ`, Line: 13, Col: 50}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/subtitle.templ`, Line: 14, Col: 50}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {
@@ -60,6 +61,7 @@ func EditSubtitle(old string) templ.Component {
 
 func handleUpdateSubtitle(w http.ResponseWriter, r *http.Request) {
 	new := r.FormValue("subtitle")
+	core.SubtitleSave(new)
 	Text(new).Render(r.Context(), w)
 }
 
@@ -91,7 +93,7 @@ func Text(current string) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(current)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/subtitle.templ`, Line: 23, Col: 83}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/subtitle.templ`, Line: 25, Col: 83}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {

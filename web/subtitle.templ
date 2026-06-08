@@ -1,8 +1,9 @@
 package web
 
 import "net/http"
+import "templeruins/core"
 
-var subtitle = "Full-stack software engineer building reliable TypeScript, frontend, and backend systems"
+var subtitle = core.SubtitleRead()
 
 func handleEditSubtitle(w http.ResponseWriter, r *http.Request) {
 	EditSubtitle(subtitle).Render(r.Context(), w)
@@ -16,6 +17,7 @@ templ EditSubtitle(old string) {
 
 func handleUpdateSubtitle(w http.ResponseWriter, r *http.Request) {
 	new := r.FormValue("subtitle")
+	core.SubtitleSave(new)
 	Text(new).Render(r.Context(), w)
 }
 
