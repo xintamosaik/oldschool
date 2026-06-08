@@ -9,8 +9,9 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import "net/http"
+import "templeruins/core"
 
-var linkedin = "https://www.linkedin.com/in/ulfdellbruegge/"
+var linkedin = core.LinkeInRead()
 
 func handleEditLinkedIn(w http.ResponseWriter, r *http.Request) {
 	EditLinkedIn(linkedin).Render(r.Context(), w)
@@ -44,7 +45,7 @@ func EditLinkedIn(old string) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(old)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/linkedin.templ`, Line: 13, Col: 50}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/linkedin.templ`, Line: 14, Col: 50}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {
@@ -60,6 +61,7 @@ func EditLinkedIn(old string) templ.Component {
 
 func handleUpdateLinkedIn(w http.ResponseWriter, r *http.Request) {
 	new := r.FormValue("linkedin")
+	core.LinkeInSave(new)
 	LinkedIn(new).Render(r.Context(), w)
 }
 
@@ -91,7 +93,7 @@ func LinkedIn(current string) templ.Component {
 		var templ_7745c5c3_Var4 templ.SafeURL
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinURLErrs(current)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/linkedin.templ`, Line: 24, Col: 86}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/linkedin.templ`, Line: 26, Col: 86}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {

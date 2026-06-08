@@ -1,8 +1,9 @@
 package web
 
 import "net/http"
+import "templeruins/core"
 
-var linkedin = "https://www.linkedin.com/in/ulfdellbruegge/"
+var linkedin = core.LinkeInRead()
 
 func handleEditLinkedIn(w http.ResponseWriter, r *http.Request) {
 	EditLinkedIn(linkedin).Render(r.Context(), w)
@@ -16,6 +17,7 @@ templ EditLinkedIn(old string) {
 
 func handleUpdateLinkedIn(w http.ResponseWriter, r *http.Request) {
 	new := r.FormValue("linkedin")
+	core.LinkeInSave(new)
 	LinkedIn(new).Render(r.Context(), w)
 }
 
