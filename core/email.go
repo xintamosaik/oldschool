@@ -6,6 +6,6 @@ func EmailRead() string{
 	return files.EmailRead()
 }
 
-func EmailSave() {
-
+func EmailSave(text string) {
+	files.EmailSave(text)
 }

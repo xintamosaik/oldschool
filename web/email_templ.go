@@ -64,7 +64,7 @@ func EditEmail(old string) templ.Component {
 
 func handleUpdateEmail(w http.ResponseWriter, r *http.Request) {
 	email = r.FormValue("email")
-
+	core.EmailSave(email)
 	Email(email).Render(r.Context(), w)
 }
 

@@ -5,10 +5,26 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 )
 
-func EmailSave() {
+func EmailSave(text string) {
+	path := filepath.Join(data_path + "email.txt")
+	f, err := os.Create(path)
+	if err != nil {
+		log.Fatalf("error writing file: %s", err)
+	}
 
+	defer f.Close()
+	 
+	n, err := f.WriteString(text)
+	if err != nil {
+		log.Fatalf("error writing file: %s", err)
+	} else {
+		log.Printf("We did this: %d", n )
+	}
+
+	f.Sync()
 }
 
 func EmailRead() string {
@@ -26,11 +42,11 @@ func EmailRead() string {
 	for scanner.Scan() {
 		line := scanner.Text() // Get the line as a string
 		fmt.Println(line)
-		
-		if (len(line) > 5) {
+
+		if len(line) > 5 {
 			return line
 		}
-		
+
 	}
 
 	// Check for errors during the scan
