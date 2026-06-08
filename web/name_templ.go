@@ -11,7 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import "net/http"
 import "templeruins/core"
 
-var name = "Ulf Dellbruegge"
+var name = core.NameRead()
 
 func handleEditName(w http.ResponseWriter, r *http.Request) {
 	EditName(name).Render(r.Context(), w)

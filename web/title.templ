@@ -1,11 +1,13 @@
 package web
 
+import "templeruins/core"
+
 templ Title() {
 	<section id="title">
 		<h1>
-			@Name("Ulf Dellbruegge")
+			@Name(core.NameRead())
 			<span class="dash"></span>
-			@Role("SOFTWARE ENGINEER (FULL-STACK / TYPESCRIPT)")
+			@Role(core.RoleRead())
 		</h1>
 	</section>
 }
