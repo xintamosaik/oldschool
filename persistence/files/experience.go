@@ -1,0 +1,29 @@
+package files
+
+type Job struct {
+	Role        string    `json:"role"`
+	Company     string    `json:"company"`
+	Location    string    `json:"location"`
+	IsCurrent   bool      `json:"isCurrent"`
+	
+	StartYear   int       `json:"startYear"`
+	StartMonth  string    `json:"startMonth"` // e.g., "Jan", "April"
+	
+	// Pointers allow these to be null in JSON if isCurrent is true
+	EndYear     *int      `json:"endYear,omitempty"`
+	EndMonth    *string   `json:"endMonth,omitempty"`
+	
+	Highlights  []string  `json:"highlights"`
+}
+ 
+type Experience struct {
+	Jobs []Job `json:"jobs"`
+}
+
+func ExperienceSave(experience Experience) {
+	jsonWrite("experience.json", experience)
+}
+
+func ExperienceRead() Experience {
+	return jsonRead("experience.json")
+}
