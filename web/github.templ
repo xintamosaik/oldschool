@@ -1,8 +1,9 @@
 package web
 
 import "net/http"
+import "templeruins/core"
 
-var github = "https://github.com/xintamosaik"
+var github = core.GitHubRead()
 
 func handleEditGitHub(w http.ResponseWriter, r *http.Request) {
 	EditGitHub(github).Render(r.Context(), w)
@@ -16,6 +17,7 @@ templ EditGitHub(old string) {
 
 func handleUpdateGitHub(w http.ResponseWriter, r *http.Request) {
 	new := r.FormValue("github")
+	core.GitHubSave(new)
 	GitHub(new).Render(r.Context(), w)
 }
 
