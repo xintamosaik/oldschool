@@ -2,7 +2,6 @@ package files
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -41,7 +40,6 @@ func lineRead(filename string) string {
 	// Loop through the file and read each line
 	for scanner.Scan() {
 		line := scanner.Text() // Get the line as a string
-		fmt.Println(line)
 
 		if len(line) > 5 {
 			return line
