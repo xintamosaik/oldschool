@@ -7,81 +7,90 @@ import (
 	"templeruins/persistence/files"
 )
 
-
- 
-//StartYear  int `json:"startYear"`////StartMonth int `json:"startMonth"` // e.g., "Jan", "April//
-//// Pointers allow these to be null in JSON if isCurrent is true
-//EndYear  *int `json:"endYear,omitempty"////EndMonth *int `json:"endMonth,omitempty//
-//Highlights []string `json:"highlights"`
 var job = core.JobRead(1)
 
 func handleEditJob(w http.ResponseWriter, r *http.Request) {
-	EditJob(core.JobRead(1)).Render(r.Context(), w)
+	id := r.FormValue("ID")
+	EditJob(core.JobRead(id)).Render(r.Context(), w)
 }
 
 templ EditJob(old files.Job) {
 	<form hx-post="/cv/update/job" hx-target="form" hx-swap="outerHTML">
-		
-		<input type="hidden" value={old.ID}> 
-
+		<input type="hidden" value={ old.ID }/>
 		<p>
 			<label { "for" }="Company">
 				Company
+				<br/>
 				<input name="Company" id="Company" value={ old.Company }/>
 			</label>
 		</p>
 		<p>
 			<label { "for" }="Location">
 				Location
+				<br/>
 				<input name="Location" id="Location" value={ old.Location }/>
 			</label>
 		</p>
 		<p>
 			<label { "for" }="Role">
 				Role
+				<br/>
 				<input name="Role" id="Role" value={ old.Role }/>
 			</label>
 		</p>
 		<p>
 			<label { "for" }="IsCurrent">
-				IsCurrent
-				<input name="IsCurrent" id="IsCurrent" value={ old.IsCurrent }/>
+				IsCurrent { old.IsCurrent }
+				<br/>
+				if old.IsCurrent {
+					<input type="radio" name="IsCurrent" id="current" value="true" checked/>
+				} else {
+					<input type="radio" name="IsCurrent" id="current" value="true"/>
+				}
+				if old.IsCurrent {
+					<input type="radio" name="IsCurrent" id="old" value="false"/>
+				} else {
+					<input type="radio" name="IsCurrent" id="old" value="false" checked/>
+				}
 			</label>
 		</p>
 		<p>
 			<label { "for" }="StartYear">
 				StartYear
+				<br/>
 				<input name="StartYear" id="StartYear" value={ old.StartYear }/>
 			</label>
 		</p>
 		<p>
 			<label { "for" }="StartMonth">
 				StartMonth
+				<br/>
 				<input name="StartMonth" id="StartMonth" value={ old.StartMonth }/>
 			</label>
 		</p>
-		<p>	
+		<p>
 			<label { "for" }="EndYear">
 				EndYear
+				<br/>
 				<input name="EndYear" id="EndYear" value={ old.EndYear }/>
 			</label>
 		</p>
 		<p>
 			<label { "for" }="EndMonth">
 				EndMonth
+				<br/>
 				<input name="EndMonth" id="EndMonth" value={ old.EndMonth }/>
 			</label>
 		</p>
 		<p>
-			<label { "for"}="Highlights">
-			Highlights
-			<textarea>
-			for _, item := range job.Highlights {
-				{ item }
-			}
-			</textarea>
-			
-
+			<label { "for" }="Highlights">
+				highlights
+				<br/>
+				<textarea cols="80" rows="7" name="Highlights" id="Highlights">
+					for _, item := range job.Highlights {
+						{ item }
+					}
+				</textarea>
 			</label>
 		</p>
 		<button type="submit">Submit</button>
@@ -99,14 +108,14 @@ func handleUpdateJob(w http.ResponseWriter, r *http.Request) {
 		Role:      r.FormValue("Role"),
 		IsCurrent: isCurrent,
 	}
-	
+
 	core.JobUpdate(job)
-	
+
 	Job(job).Render(r.Context(), w)
 }
 
 func init() {
-	http.HandleFunc("/cv/edit/job", handleEditJob)
+	http.HandleFunc("/cv/edit/{id}/job", handleEditJob)
 	http.HandleFunc("/cv/update/job", handleUpdateJob)
 }
 
@@ -120,7 +129,7 @@ func formatEndDate(job files.Job) string {
 }
 
 templ Job(job files.Job) {
-	<div class="job entry" hx-post="/cv/edit/job" hx-trigger="click" hx-swap="outerHTML">
+	<div class="job entry" hx-post={ "/cv/edit/" + job.ID + "/job" } hx-trigger="click" hx-swap="outerHTML">
 		<h3>
 			<span>{ job.Role }</span>
 			<span class="dash"></span>
