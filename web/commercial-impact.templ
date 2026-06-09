@@ -69,8 +69,9 @@ templ CommercialImpact(commercialImpact string) {
 		<h2>Commercial Impact Highlights</h2>
 		<ul hx-post="/cv/edit/commercialImpact" hx-trigger="click" hx-swap="outerHTML" hx-target="#commercial_impact">
 			for _, item := range markup(commercialImpact) {
-				<li>@templ.Raw(item)
-</li>
+				<li> 
+					@templ.Raw(item) 
+				</li>
 			}
 		</ul>
 	</section>
