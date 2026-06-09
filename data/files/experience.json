@@ -1,8 +1,22 @@
 [
         {
                 "role": "Software Engineer",
+                "company": "aufinity Group GmbH",
+                "isCurrent": true,
+                "startYear": 2025,
+                "startMonth": 1,
+                "location": "Cologne, Germany",
+                "highlights": [
+                        "Delivered production changes across a Dockerised microservice platform using Vue, Fastify, MongoDB, Redis, and Kubernetes.",
+                        "Developed and maintained frontend and backend services within a proprietary internal framework used across multiple services.",
+                        "Reached full delivery velocity within weeks by quickly understanding the internal framework, service boundaries, and deployment workflow.",
+                        "Implemented unit and integration tests in a JSDoc-typed JavaScript environment, improving confidence in service changes.",
+                        "Contributed to containerised release workflows and Kubernetes-based deployments supporting reliable production delivery."
+                ]
+        },
+        {
+                "role": "Software Engineer",
                 "company": "iq digital media marketing gmbh",
-                
                 "isCurrent": false,
                 "startYear": 2024,
                 "startMonth": 1,
@@ -19,25 +33,8 @@
                 ]
         },
         {
-                "role": "Software Engineer",
-                "company": "aufinity Group GmbH",
-                
-                "isCurrent": true,
-                "startYear": 2025,
-                "startMonth": 1,
-                "location": "Cologne, Germany",
-                "highlights": [
-                        "Delivered production changes across a Dockerised microservice platform using Vue, Fastify, MongoDB, Redis, and Kubernetes.",
-                        "Developed and maintained frontend and backend services within a proprietary internal framework used across multiple services.",
-                        "Reached full delivery velocity within weeks by quickly understanding the internal framework, service boundaries, and deployment workflow.",
-                        "Implemented unit and integration tests in a JSDoc-typed JavaScript environment, improving confidence in service changes.",
-                        "Contributed to containerised release workflows and Kubernetes-based deployments supporting reliable production delivery."
-                ]
-        },
-        {
                 "role": "Full Stack Developer",
                 "company": "Qanuk GmbH",
-                
                 "isCurrent": false,
                 "startYear": 2021,
                 "startMonth": 4,

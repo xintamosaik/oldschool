@@ -11,7 +11,7 @@ func formatEndDate(job files.Job) string {
 		return "Now"
 	}
 	// Dereference the pointers safely using *
-	return *job.EndMonth + "/" + strconv.Itoa(*job.EndYear)
+	return strconv.Itoa(*job.EndMonth) + "/" + strconv.Itoa(*job.EndYear)
 }
 
 templ Job(job files.Job) {
@@ -22,7 +22,7 @@ templ Job(job files.Job) {
 			<span>{ job.Company }</span>
 		</h3>
 		<h4>
-			<span>{ job.StartMonth }/{ strconv.Itoa(job.StartYear) }</span> - 
+			<span>{ strconv.Itoa(job.StartMonth) }/{ strconv.Itoa(job.StartYear) }</span> - 
 			<span>{ formatEndDate(job) }</span>
 			<span class="dash"></span>
 			<span>{ job.Location }</span>
@@ -30,7 +30,7 @@ templ Job(job files.Job) {
 		<ul>
 			for _, item := range job.Highlights {
 				<li>
-					{ strongify(item) }
+					@templ.Raw(strongify(item))
 				</li>
 			}
 		</ul>
