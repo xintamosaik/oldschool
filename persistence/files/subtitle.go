@@ -1,9 +1,9 @@
 package files
 
 func SubtitleSave(text string) {
-	txtSave(text, "subtitle.txt")
+	lineSave(text, "subtitle.txt")
 }
 
 func SubtitleRead() string {
-	return txtRead("subtitle.txt")
+	return lineRead("subtitle.txt")
 }

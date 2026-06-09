@@ -1,12 +1,14 @@
 package web
 
+import "templeruins/core"
+
 templ Home() {
 	<main>
 		@Title()
 		@Subtitle()
 		@Relocation()
 		@Contact()
-		@CommercialImpact()
+		@CommercialImpact(core.CommercialImpactRead())
 		@Summary()
 		@Experience()
 		@Skills()

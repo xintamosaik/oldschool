@@ -8,7 +8,20 @@ package web
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func CommercialImpact() templ.Component {
+import (
+	"net/http"
+	"regexp"
+	"strings"
+	"templeruins/core"
+)
+
+var commercialImpact = core.CommercialImpactRead()
+
+func handleEditCommercialImpact(w http.ResponseWriter, r *http.Request) {
+	EditCommercialImpact(commercialImpact).Render(r.Context(), w)
+}
+
+func EditCommercialImpact(old string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -29,7 +42,98 @@ func CommercialImpact() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section id=\"commercial_impact\"><h2>Commercial Impact Highlights</h2><ul><li><strong>Replaced a 5,000+ LOC legacy AdController</strong> with a 60-line config-driven system → removed third-party dependency and enabled version-controlled deployments</li><li>Reduced delivery feedback loops from 3–5 minutes to under 1 second, accelerating iteration and release confidence</li><li>Cut bug rates ~20% in key workflows, improving system stability and stakeholder trust</li></ul></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form hx-post=\"/cv/update/commercialImpact\" hx-target=\"form\" hx-swap=\"outerHTML\"><input name=\"commercialImpact\" id=\"commercialImpact\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(old)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/commercial-impact.templ`, Line: 18, Col: 66}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"></form>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func handleUpdateCommercialImpact(w http.ResponseWriter, r *http.Request) {
+	commercialImpact = r.FormValue("commercialImpact")
+	core.CommercialImpactSave(commercialImpact)
+	CommercialImpact(commercialImpact).Render(r.Context(), w)
+}
+
+func init() {
+	http.HandleFunc("/cv/edit/commercialImpact", handleEditCommercialImpact)
+	http.HandleFunc("/cv/update/commercialImpact", handleUpdateCommercialImpact)
+}
+
+// takes markdown and converts to html - but only list items and strong works
+// markup now returns a slice of strings, each containing processed HTML for a single item
+func markup(input string) []string {
+	strongRegex := regexp.MustCompile(`\*\*(.*?)\*\*`)
+	lines := strings.Split(input, "\n")
+	var items []string
+
+	for _, line := range lines {
+		trimmedLine := strings.TrimSpace(line)
+		if strings.HasPrefix(trimmedLine, "- ") {
+			content := strings.TrimPrefix(trimmedLine, "- ")
+			// Convert **bold** to <strong>bold</strong>
+			content = strongRegex.ReplaceAllString(content, "<strong>$1</strong>")
+			items = append(items, content)
+		}
+	}
+
+	return items
+}
+
+func CommercialImpact(commercialImpact string) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var3 == nil {
+			templ_7745c5c3_Var3 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<section id=\"commercial_impact\"><h2>Commercial Impact Highlights</h2><ul hx-post=\"/cv/edit/commercialImpact\" hx-trigger=\"click\" hx-swap=\"outerHTML\"><pre>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		for _, item := range markup(commercialImpact) {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<li>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templ.Raw(item).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</li>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</pre></ul></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

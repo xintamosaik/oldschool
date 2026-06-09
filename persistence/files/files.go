@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-func txtSave(text string, filename string) {
+func lineSave(text string, filename string) {
 	path := filepath.Join(data_path + filename)
 	f, err := os.Create(path)
 	if err != nil {
@@ -16,18 +16,18 @@ func txtSave(text string, filename string) {
 	}
 
 	defer f.Close()
-	 
+
 	n, err := f.WriteString(text)
 	if err != nil {
 		log.Fatalf("error writing file: %s", err)
 	} else {
-		log.Printf("We did this: %d", n )
+		log.Printf("We did this: %d", n)
 	}
 
 	f.Sync()
 }
 
-func txtRead(filename string) string {
+func lineRead(filename string) string {
 	// Open the file
 	file, err := os.Open(data_path + filename)
 	if err != nil {

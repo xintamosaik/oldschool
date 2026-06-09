@@ -1,9 +1,9 @@
 package files
 
 func RoleSave(text string) {
-	txtSave(text, "role.txt")
+	lineSave(text, "role.txt")
 }
 
 func RoleRead() string {
-	return txtRead("role.txt")
+	return lineRead("role.txt")
 }

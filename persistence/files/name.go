@@ -1,9 +1,9 @@
 package files
 
 func NameSave(text string) {
-	txtSave(text, "name.txt")
+	lineSave(text, "name.txt")
 }
 
 func NameRead() string {
-	return txtRead("name.txt")
+	return lineRead("name.txt")
 }

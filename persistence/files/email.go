@@ -1,9 +1,9 @@
 package files
 
 func EmailSave(text string) {
-	txtSave(text, "email.txt")
+	lineSave(text, "email.txt")
 }
 
 func EmailRead() string {
-	return txtRead("email.txt")
+	return lineRead("email.txt")
 }
