@@ -16,14 +16,11 @@ type Job struct {
 	Highlights  []string  `json:"highlights"`
 }
  
-type Experience struct {
-	Jobs []Job `json:"jobs"`
-}
-
-func ExperienceSave(experience Experience) {
+ 
+func ExperienceSave(experience []Job) {
 	jsonWrite("experience.json", experience)
 }
 
-func ExperienceRead() Experience {
+func ExperienceRead() []Job {
 	return jsonRead("experience.json")
 }

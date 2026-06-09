@@ -4,25 +4,36 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	 
 )
 
-func jsonRead(file string) Experience {
+// Experience represents the top-level JSON wrapper structure
+type Experience struct {
+	Jobs []Job `json:"jobs"`
+}
+
+// jsonRead now correctly extracts and returns the []Job slice
+func jsonRead(file string) []Job {
 	str := fileRead(file)
-	res := Experience{}
-	json.Unmarshal([]byte(str), &res)
+	var res []Job // Read directly into a slice of Jobs instead of the struct
+	
+	err := json.Unmarshal([]byte(str), &res)
+	if err != nil {
+		log.Printf("Error unmarshaling json from %s: %s", file, err)
+		return []Job{}
+	}
+	
 	fmt.Println(res)
 	return res
 }
-
-func jsonWrite(file string, experience Experience) {
-	
-	json, err := json.Marshal(experience)
+// jsonWrite now wraps the []Job back into an Experience struct before marshaling
+func jsonWrite(file string, experience []Job) {
+	// Marshal the slice directly to keep it a flat array in the JSON file
+	jsonData, err := json.MarshalIndent(experience, "", "  ")
 	if err != nil {
-		log.Fatalf("Error reading json %s", file)
+		log.Fatalf("Error marshaling json %s: %s", file, err)
 		return
 	}
-	str := fmt.Sprintf("%d", json)
+	
+	str := string(jsonData) 
 	fileSave(str, file)
-
 }

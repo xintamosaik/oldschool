@@ -1,7 +1,18 @@
 
 package web
 
-import "templeruins/persistence/files"
+import (
+	"strconv"
+	"templeruins/persistence/files"
+)
+// formatEndDate safely checks if the end date is null (current job) or formats it
+func formatEndDate(job files.Job) string {
+	if job.IsCurrent || job.EndMonth == nil || job.EndYear == nil {
+		return "Now"
+	}
+	// Dereference the pointers safely using *
+	return *job.EndMonth + "/" + strconv.Itoa(*job.EndYear)
+}
 
 templ Job(job files.Job) {
 	<div class="job entry">
@@ -11,8 +22,8 @@ templ Job(job files.Job) {
 			<span>{ job.Company }</span>
 		</h3>
 		<h4>
-			<span>{ job.StartMonth }/{ job.StartYear }</span> - 
-			<span>{ job.EndMonth }/{ job.EndYear }</span>
+			<span>{ job.StartMonth }/{ strconv.Itoa(job.StartYear) }</span> - 
+			<span>{ formatEndDate(job) }</span>
 			<span class="dash"></span>
 			<span>{ job.Location }</span>
 		</h4>
