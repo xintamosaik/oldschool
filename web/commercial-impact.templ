@@ -15,7 +15,8 @@ func handleEditCommercialImpact(w http.ResponseWriter, r *http.Request) {
 
 templ EditCommercialImpact(old string) {
 	<form hx-post="/cv/update/commercialImpact" hx-target="form" hx-swap="outerHTML">
-		<input name="commercialImpact" id="commercialImpact" value={ old }/>
+		<textarea cols="80" rows="7" name="commercialImpact" id="commercialImpact">{ old }</textarea>
+		<button type="submit">Submit</button>
 	</form>
 }
 
@@ -35,31 +36,41 @@ func init() {
 // markup now returns a slice of strings, each containing processed HTML for a single item
 func markup(input string) []string {
 	strongRegex := regexp.MustCompile(`\*\*(.*?)\*\*`)
-	lines := strings.Split(input, "\n")
+	
+	// Split by newline followed by a dash to capture multi-line blocks cleanly
+	// We handle the very first dash by cleaning up the initial string
+	input = strings.TrimSpace(input)
+	input = strings.TrimPrefix(input, "- ")
+	
+	chunks := strings.Split(input, "\n- ")
 	var items []string
 
-	for _, line := range lines {
-		trimmedLine := strings.TrimSpace(line)
-		if strings.HasPrefix(trimmedLine, "- ") {
-			content := strings.TrimPrefix(trimmedLine, "- ")
-			// Convert **bold** to <strong>bold</strong>
-			content = strongRegex.ReplaceAllString(content, "<strong>$1</strong>")
-			items = append(items, content)
+	for _, chunk := range chunks {
+		content := strings.TrimSpace(chunk)
+		if content == "" {
+			continue
 		}
+
+		// Replace any internal hard line breaks with a space
+		content = regexp.MustCompile(`\s*\n\s*`).ReplaceAllString(content, " ")
+
+		// Convert **bold** to <strong>bold</strong>
+		content = strongRegex.ReplaceAllString(content, "<strong>$1</strong>")
+		
+		items = append(items, content)
 	}
 
 	return items
 }
-
 templ CommercialImpact(commercialImpact string) {
 	<section id="commercial_impact">
 		<h2>Commercial Impact Highlights</h2>
 		<ul hx-post="/cv/edit/commercialImpact" hx-trigger="click" hx-swap="outerHTML">
-		<pre>
+		
 		for _, item := range markup(commercialImpact) {
 				<li>@templ.Raw(item)</li>
 			}
-		</pre>
+		
 		</ul>
 	</section>
 }

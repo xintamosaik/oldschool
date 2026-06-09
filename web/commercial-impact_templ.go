@@ -42,20 +42,20 @@ func EditCommercialImpact(old string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form hx-post=\"/cv/update/commercialImpact\" hx-target=\"form\" hx-swap=\"outerHTML\"><input name=\"commercialImpact\" id=\"commercialImpact\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form hx-post=\"/cv/update/commercialImpact\" hx-target=\"form\" hx-swap=\"outerHTML\"><textarea cols=\"80\" rows=\"7\" name=\"commercialImpact\" id=\"commercialImpact\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(old)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(old)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/commercial-impact.templ`, Line: 18, Col: 66}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/commercial-impact.templ`, Line: 18, Col: 82}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</textarea> <button type=\"submit\">Submit</button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -78,17 +78,28 @@ func init() {
 // markup now returns a slice of strings, each containing processed HTML for a single item
 func markup(input string) []string {
 	strongRegex := regexp.MustCompile(`\*\*(.*?)\*\*`)
-	lines := strings.Split(input, "\n")
+
+	// Split by newline followed by a dash to capture multi-line blocks cleanly
+	// We handle the very first dash by cleaning up the initial string
+	input = strings.TrimSpace(input)
+	input = strings.TrimPrefix(input, "- ")
+
+	chunks := strings.Split(input, "\n- ")
 	var items []string
 
-	for _, line := range lines {
-		trimmedLine := strings.TrimSpace(line)
-		if strings.HasPrefix(trimmedLine, "- ") {
-			content := strings.TrimPrefix(trimmedLine, "- ")
-			// Convert **bold** to <strong>bold</strong>
-			content = strongRegex.ReplaceAllString(content, "<strong>$1</strong>")
-			items = append(items, content)
+	for _, chunk := range chunks {
+		content := strings.TrimSpace(chunk)
+		if content == "" {
+			continue
 		}
+
+		// Replace any internal hard line breaks with a space
+		content = regexp.MustCompile(`\s*\n\s*`).ReplaceAllString(content, " ")
+
+		// Convert **bold** to <strong>bold</strong>
+		content = strongRegex.ReplaceAllString(content, "<strong>$1</strong>")
+
+		items = append(items, content)
 	}
 
 	return items
@@ -115,7 +126,7 @@ func CommercialImpact(commercialImpact string) templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<section id=\"commercial_impact\"><h2>Commercial Impact Highlights</h2><ul hx-post=\"/cv/edit/commercialImpact\" hx-trigger=\"click\" hx-swap=\"outerHTML\"><pre>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<section id=\"commercial_impact\"><h2>Commercial Impact Highlights</h2><ul hx-post=\"/cv/edit/commercialImpact\" hx-trigger=\"click\" hx-swap=\"outerHTML\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -133,7 +144,7 @@ func CommercialImpact(commercialImpact string) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</pre></ul></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</ul></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

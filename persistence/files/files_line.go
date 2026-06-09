@@ -55,3 +55,4 @@ func lineRead(filename string) string {
 	}
 	return ""
 }
+
