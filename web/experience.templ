@@ -2,10 +2,8 @@
 package web
 
 import "templeruins/persistence/files"
-import *string
-import *int
 
-templ job(job files.Job) {
+templ Job(job files.Job) {
 	<div class="job entry">
 		<h3>
 			<span>{ job.Role }</span>
@@ -13,28 +11,28 @@ templ job(job files.Job) {
 			<span>{ job.Company }</span>
 		</h3>
 		<h4>
-			<span>{ job.StartMonth }/{job.StartYear}</span> - 
-			<span>{ job.EndMonth }/{job.EndYear}</span>
+			<span>{ job.StartMonth }/{ job.StartYear }</span> - 
+			<span>{ job.EndMonth }/{ job.EndYear }</span>
 			<span class="dash"></span>
 			<span>{ job.Location }</span>
 		</h4>
 		<ul>
-			for _, item := range markup(job.Highlights) {
+			for _, item := range job.Highlights {
 				<li>
-					@templ.Raw(item)
+					{ strongify(item) }
 				</li>
-			} 
+			}
 		</ul>
 	</div>
 }
 
-templ Experience(experience files.Experience) {
+templ Experience(experience []files.Job) {
 	<section id="experience">
 		<h2>Experience</h2>
-		for _, item := range experience) {
-				<li>
-					@Job(item)
-				</li>
+		for _, item := range experience {
+			<li>
+				@Job(item)
+			</li>
 		}
 	</section>
 }

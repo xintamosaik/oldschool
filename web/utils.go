@@ -4,11 +4,14 @@ import (
 	"regexp"
 	"strings"
 )
-
+var strongRegex = regexp.MustCompile(`\*\*(.*?)\*\*`)
+func strongify(markdown string)string {
+	return strongRegex.ReplaceAllString(markdown, "<strong>$1</strong>")
+}
 // takes markdown and converts to html - but only list items and strong works
 // markup now returns a slice of strings, each containing processed HTML for a single item
 func markup(input string) []string {
-	strongRegex := regexp.MustCompile(`\*\*(.*?)\*\*`)
+	
 
 	// Split by newline followed by a dash to capture multi-line blocks cleanly
 	// We handle the very first dash by cleaning up the initial string
@@ -28,7 +31,7 @@ func markup(input string) []string {
 		content = regexp.MustCompile(`\s*\n\s*`).ReplaceAllString(content, " ")
 
 		// Convert **bold** to <strong>bold</strong>
-		content = strongRegex.ReplaceAllString(content, "<strong>$1</strong>")
+		content = strongify(content)
 
 		items = append(items, content)
 	}
