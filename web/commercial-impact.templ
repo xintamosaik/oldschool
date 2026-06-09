@@ -24,7 +24,7 @@ templ EditCommercialImpact(old string) {
 func handleUpdateCommercialImpact(w http.ResponseWriter, r *http.Request) {
 	commercialImpact = r.FormValue("commercialImpact")
 	core.CommercialImpactSave(commercialImpact)
-	log.Printf("new %d", commercialImpact)
+	log.Printf("new %s", commercialImpact)
 	CommercialImpact(commercialImpact).Render(r.Context(), w)
 }
 
