@@ -1,6 +1,7 @@
 package web
 
 import (
+	"log"
 	"net/http"
 	"regexp"
 	"strings"
@@ -23,9 +24,9 @@ templ EditCommercialImpact(old string) {
 func handleUpdateCommercialImpact(w http.ResponseWriter, r *http.Request) {
 	commercialImpact = r.FormValue("commercialImpact")
 	core.CommercialImpactSave(commercialImpact)
+	log.Printf("new %d", commercialImpact)
 	CommercialImpact(commercialImpact).Render(r.Context(), w)
 }
-
 
 func init() {
 	http.HandleFunc("/cv/edit/commercialImpact", handleEditCommercialImpact)
@@ -36,12 +37,12 @@ func init() {
 // markup now returns a slice of strings, each containing processed HTML for a single item
 func markup(input string) []string {
 	strongRegex := regexp.MustCompile(`\*\*(.*?)\*\*`)
-	
+
 	// Split by newline followed by a dash to capture multi-line blocks cleanly
 	// We handle the very first dash by cleaning up the initial string
 	input = strings.TrimSpace(input)
 	input = strings.TrimPrefix(input, "- ")
-	
+
 	chunks := strings.Split(input, "\n- ")
 	var items []string
 
@@ -56,21 +57,21 @@ func markup(input string) []string {
 
 		// Convert **bold** to <strong>bold</strong>
 		content = strongRegex.ReplaceAllString(content, "<strong>$1</strong>")
-		
+
 		items = append(items, content)
 	}
 
 	return items
 }
+
 templ CommercialImpact(commercialImpact string) {
 	<section id="commercial_impact">
 		<h2>Commercial Impact Highlights</h2>
-		<ul hx-post="/cv/edit/commercialImpact" hx-trigger="click" hx-swap="outerHTML">
-		
-		for _, item := range markup(commercialImpact) {
-				<li>@templ.Raw(item)</li>
+		<ul hx-post="/cv/edit/commercialImpact" hx-trigger="click" hx-swap="outerHTML" hx-target="#commercial_impact">
+			for _, item := range markup(commercialImpact) {
+				<li>@templ.Raw(item)
+</li>
 			}
-		
 		</ul>
 	</section>
 }

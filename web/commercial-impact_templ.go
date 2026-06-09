@@ -9,6 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
+	"log"
 	"net/http"
 	"regexp"
 	"strings"
@@ -49,7 +50,7 @@ func EditCommercialImpact(old string) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(old)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/commercial-impact.templ`, Line: 18, Col: 82}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/commercial-impact.templ`, Line: 19, Col: 82}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -66,6 +67,7 @@ func EditCommercialImpact(old string) templ.Component {
 func handleUpdateCommercialImpact(w http.ResponseWriter, r *http.Request) {
 	commercialImpact = r.FormValue("commercialImpact")
 	core.CommercialImpactSave(commercialImpact)
+	log.Printf("new %d", commercialImpact)
 	CommercialImpact(commercialImpact).Render(r.Context(), w)
 }
 
@@ -126,7 +128,7 @@ func CommercialImpact(commercialImpact string) templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<section id=\"commercial_impact\"><h2>Commercial Impact Highlights</h2><ul hx-post=\"/cv/edit/commercialImpact\" hx-trigger=\"click\" hx-swap=\"outerHTML\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<section id=\"commercial_impact\"><h2>Commercial Impact Highlights</h2><ul hx-post=\"/cv/edit/commercialImpact\" hx-trigger=\"click\" hx-swap=\"outerHTML\" hx-target=\"#commercial_impact\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
