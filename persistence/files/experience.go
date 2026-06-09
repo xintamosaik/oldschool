@@ -1,6 +1,7 @@
 package files
 
 type Job struct {
+	ID        string `json:"id"`
 	Role      string `json:"role"`
 	Company   string `json:"company"`
 	Location  string `json:"location"`
@@ -15,11 +16,28 @@ type Job struct {
 
 	Highlights []string `json:"highlights"`
 }
+// Experience represents the top-level JSON wrapper structure
+type Experience struct {
+	Jobs []Job `json:"jobs"`
+}
 
-func ExperienceSave(experience []Job) {
+func experienceSave(experience []Job) {
 	jsonWrite("experience.json", experience)
 }
 
 func ExperienceRead() []Job {
 	return jsonRead("experience.json")
+}
+
+ 
+func ExperienceAdd(new Job) {
+	current := ExperienceRead()
+	// implement
+	experienceSave(current)
+}
+
+func ExperienceUpdate(updated Job) {
+	current := ExperienceRead()
+	// implement
+	experienceSave(current)
 }

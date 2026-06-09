@@ -4,12 +4,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"crypto/rand"
+	"encoding/hex"
 )
-
-// Experience represents the top-level JSON wrapper structure
-type Experience struct {
-	Jobs []Job `json:"jobs"`
+// Zero-dependency random ID generator
+func generateShortID() string {
+	b := make([]byte, 4) // 4 bytes = 8 hex characters
+	rand.Read(b)
+	return hex.EncodeToString(b)
 }
+
 
 // jsonRead now correctly extracts and returns the []Job slice
 func jsonRead(file string) []Job {

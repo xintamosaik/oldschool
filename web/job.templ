@@ -1,0 +1,72 @@
+package web
+
+import (
+	"net/http"
+ 	"strconv"
+	"templeruins/persistence/files"
+	"templeruins/core"
+)
+
+ 
+
+func handleEditJob(w http.ResponseWriter, r *http.Request) {
+	EditJob(email).Render(r.Context(), w)
+}
+
+templ EditJob(old string) {
+	<form hx-post="/cv/update/email" hx-target="form" hx-swap="outerHTML">
+		<input name="email" id="email" value={ old }/>
+	</form>
+}
+
+func handleUpdateJob(w http.ResponseWriter, r *http.Request) {
+	email = r.FormValue("email")
+	core.JobSave(email)
+	Job(email).Render(r.Context(), w)
+}
+
+
+func init() {
+	http.HandleFunc("/cv/edit/email", handleEditJob)
+	http.HandleFunc("/cv/update/email", handleUpdateJob)
+}
+
+ 
+// formatEndDate safely checks if the end date is null (current job) or formats it
+func formatEndDate(job files.Job) string {
+	if job.IsCurrent || job.EndMonth == nil || job.EndYear == nil {
+		return "Now"
+	}
+	// Dereference the pointers safely using *
+	return strconv.Itoa(*job.EndMonth) + "/" + strconv.Itoa(*job.EndYear)
+}
+
+templ Job(job files.Job) {
+	<div class="job entry">
+		<h3>
+			<span>{ job.Role }</span>
+			<span class="dash"></span>
+			<span>{ job.Company }</span>
+		</h3>
+		<h4>
+			<span>{ strconv.Itoa(job.StartMonth) }/{ strconv.Itoa(job.StartYear) }</span> - 
+			<span>{ formatEndDate(job) }</span>
+			<span class="dash"></span>
+			<span>{ job.Location }</span>
+		</h4>
+		<ul>
+			for _, item := range job.Highlights {
+				<li>
+					@templ.Raw(strongify(item))
+				</li>
+			}
+		</ul>
+	</div>
+	<span>
+		<a hx-post="/cv/edit/email" hx-trigger="click" hx-swap="outerHTML" href={ "mailto:" + current }>
+			{ current }
+		</a>
+	</span>
+}
+
+ 
