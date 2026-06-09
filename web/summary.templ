@@ -1,21 +1,45 @@
 package web
 
-templ Summary() {
-	<section id="summary">
+import (
+	"log"
+	"net/http"
+	"templeruins/core"
+)
+
+var summary = core.SummaryRead()
+
+func handleEditSummary(w http.ResponseWriter, r *http.Request) {
+	EditSummary(summary).Render(r.Context(), w)
+}
+
+templ EditSummary(old string) {
+	<form hx-post="/cv/update/summary" hx-target="form" hx-swap="outerHTML">
+		<textarea cols="80" rows="7" name="summary" id="summary">{ old }</textarea>
+		<button type="submit">Submit</button>
+	</form>
+}
+
+func handleUpdateSummary(w http.ResponseWriter, r *http.Request) {
+	summary = r.FormValue("summary")
+	core.SummarySave(summary)
+	log.Printf("new %s", summary)
+	Summary(summary).Render(r.Context(), w)
+}
+
+func init() {
+	http.HandleFunc("/cv/edit/summary", handleEditSummary)
+	http.HandleFunc("/cv/update/summary", handleUpdateSummary)
+}
+
+templ Summary(summary string) {
+	<section id="summary" hx-post="/cv/edit/summary" hx-trigger="click" hx-swap="outerHTML" hx-target="#summary">
 		<h2>Summary</h2>
-		<p>
-			Software Engineer experienced in TypeScript, JavaScript, React, Vue, Node.js, and containerised
-			services.
-			Strong track record of modernising legacy systems, improving delivery speed, and shipping maintainable
-			production software.
-		</p>
-		<p>
-			Comfortable working across frontend, backend, tooling, and infrastructure, with experience in Dockerised
-			microservice environments and complex legacy codebases.
-		</p>
-		<p>
-			Particularly effective in ambiguous environments where systems need to be understood, simplified,
-			stabilised, and moved toward better engineering practices.
-		</p>
+	 
+		for _, item := range markup(summary) {
+			<p>
+				@templ.Raw(item)
+			</p>
+		}
+	 
 	</section>
 }
