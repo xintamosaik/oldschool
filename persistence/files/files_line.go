@@ -41,7 +41,7 @@ func lineRead(filename string) string {
 	for scanner.Scan() {
 		line := scanner.Text() // Get the line as a string
 
-		if len(line) > 5 {
+		if len(line) > 0 {
 			return line
 		}
 
