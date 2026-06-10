@@ -72,7 +72,7 @@ templ EditJob(old files.Job) {
 			</label>
 		</p>
 		if old.IsCurrent {
-			<div id="formjobend">
+			<div id="formjobend" hidden>
 				<p>
 					<label { "for" }="EndYear">
 						EndYear
@@ -111,7 +111,7 @@ templ EditJob(old files.Job) {
 				highlights
 				<br/>
 				<textarea cols="80" rows="7" name="Highlights" id="Highlights">
-					for _, item := range job.Highlights {
+					for _, item := range old.Highlights {
 						{ item }
 					}
 				</textarea>
