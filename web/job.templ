@@ -94,14 +94,14 @@ templ EditJob(old files.Job) {
 					<label { "for" }="EndYear">
 						EndYear
 						<br/>
-						<input type="number" min="1900" max="9999" name="EndYear" id="EndYear" value={ *old.EndYear }/>
+						<input type="number" min="1900" max="9999" name="EndYear" id="EndYear" value={ old.EndYear }/>
 					</label>
 				</p>
 				<p>
 					<label { "for" }="EndMonth">
 						EndMonth
 						<br/>
-						<input type="number" min="1" max="12" name="EndMonth" id="EndMonth" value={ *old.EndMonth }/>
+						<input type="number" min="1" max="12" name="EndMonth" id="EndMonth" value={ old.EndMonth }/>
 					</label>
 				</p>
 			</div>
@@ -112,7 +112,7 @@ templ EditJob(old files.Job) {
 				<br/>
 				<textarea cols="80" rows="7" name="Highlights" id="Highlights">
 					for _, item := range old.Highlights {
-						{ item }
+						- { item }
 					}
 				</textarea>
 			</label>
@@ -128,28 +128,12 @@ func handleUpdateJob(w http.ResponseWriter, r *http.Request) {
 	location := r.FormValue("Location") // Swapped out "message"
 	role := r.FormValue("Role")
 	isCurrent := r.FormValue("isCurrent") == "true"
-
 	startYear, _ := strconv.Atoi(r.FormValue("startYear"))
 	startMonth, _ := strconv.Atoi(r.FormValue("startMonth"))
-
-	// 2. Idiomatically parse optional Pointer fields (*int and *int)
-	var endYearPtr *int
-	var endMonthPtr *int
-
-	// Only attempt to parse end dates if it's not your current job
-	if !isCurrent {
-		if yearVal := r.FormValue("endYear"); yearVal != "" {
-			if parsedYear, err := strconv.Atoi(yearVal); err == nil {
-				endYearPtr = &parsedYear // Take the address of the local variable
-			}
-		}
-
-		if monthVal := r.FormValue("endMonth"); monthVal != "" {
-			if parsedMonth, err := strconv.Atoi(monthVal); err == nil {
-				endMonthPtr = &parsedMonth
-			}
-		}
-	}
+	endYear, _ := strconv.Atoi(r.FormValue("startYear"))
+	endMonth, _ := strconv.Atoi(r.FormValue("startMonth"))
+	log.Println(r.FormValue("Highlights"))
+	highlights := []string{r.FormValue("Highlights")}
 
 	// 3. Construct your clean domain block
 	job := files.Job{
@@ -160,9 +144,9 @@ func handleUpdateJob(w http.ResponseWriter, r *http.Request) {
 		IsCurrent:  isCurrent,
 		StartYear:  startYear,
 		StartMonth: startMonth,
-		EndYear:    endYearPtr,               // Will be nil if current, or hold the memory pointer
-		EndMonth:   endMonthPtr,              // Will be nil if current, or hold the memory pointer
-		Highlights: currentJobHighlights(id), // Helper to make sure highlights aren't lost
+		EndYear:    endYear, 
+		EndMonth:   endMonth, 
+		Highlights: highlights,
 	}
 
 	// 4. Update and stream the component update back to HTMX
@@ -170,30 +154,13 @@ func handleUpdateJob(w http.ResponseWriter, r *http.Request) {
 	Job(job).Render(r.Context(), w)
 }
 
-// A crucial helper for HTML forms updating arrays
-func currentJobHighlights(id string) []string {
-	// Because standard HTML text inputs inside your edit form don't easily
-	// submit an array of sub-strings unless you handle special input indexing,
-	// pulling your existing highlights from disk protects you from accidentally
-	// wiping your resume's bullet points when saving changes to the header details.
-	currentJob := core.JobRead(id)
-	return currentJob.Highlights
-}
-
+ 
 func init() {
 	http.HandleFunc("/cv/edit/{id}/job", handleEditJob)
 	http.HandleFunc("/cv/update/job", handleUpdateJob)
 }
 
-// formatEndDate safely checks if the end date is null (current job) or formats it
-func formatEndDate(job files.Job) string {
-	if job.IsCurrent || job.EndMonth == nil || job.EndYear == nil {
-		return "Now"
-	}
-	// Dereference the pointers safely using *
-	return strconv.Itoa(*job.EndMonth) + "/" + strconv.Itoa(*job.EndYear)
-}
-
+ 
 templ Job(job files.Job) {
 	<div class="job entry" hx-post={ "/cv/edit/" + job.ID + "/job" } hx-trigger="click" hx-swap="outerHTML">
 		<h3>
@@ -203,7 +170,7 @@ templ Job(job files.Job) {
 		</h3>
 		<h4>
 			<span>{ strconv.Itoa(job.StartMonth) }/{ strconv.Itoa(job.StartYear) }</span> - 
-			<span>{ formatEndDate(job) }</span>
+			<span>{ strconv.Itoa(job.EndMonth) }/{ strconv.Itoa(job.EndYear) }</span> 
 			<span class="dash"></span>
 			<span>{ job.Location }</span>
 		</h4>

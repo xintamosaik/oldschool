@@ -11,8 +11,8 @@ type Job struct {
 	StartMonth int `json:"startMonth"` // e.g., "Jan", "April"
 
 	// Pointers allow these to be null in JSON if isCurrent is true
-	EndYear  *int `json:"endYear,omitempty"`
-	EndMonth *int `json:"endMonth,omitempty"`
+	EndYear  int `json:"endYear"`
+	EndMonth int `json:"endMonth"`
 
 	Highlights []string `json:"highlights"`
 }
