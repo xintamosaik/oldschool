@@ -1,10 +1,10 @@
 package web
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 	"templeruins/core"
-	"log"
 	"templeruins/persistence/files"
 )
 
@@ -23,36 +23,24 @@ templ EditJob(old files.Job) {
 			<label { "for" }="Company">
 				Company
 				<br/>
-				<input name="Company" id="Company" value={ old.Company }/>
+				<input type="text" name="Company" id="Company" value={ old.Company }/>
 			</label>
 		</p>
 		<p>
 			<label { "for" }="Location">
 				Location
 				<br/>
-				<input name="Location" id="Location" value={ old.Location }/>
+				<input type="text" name="Location" id="Location" value={ old.Location }/>
 			</label>
 		</p>
 		<p>
 			<label { "for" }="Role">
 				Role
 				<br/>
-				<input name="Role" id="Role" value={ old.Role }/>
+				<input type="text" name="Role" id="Role" value={ old.Role }/>
 			</label>
 		</p>
-		<p>
-			<label { "for" }="IsCurrent">
-				IsCurrent
-				<br/>
-				if old.IsCurrent {
-					<input type="radio" name="IsCurrent" id="current" value="true" checked/>
-					<input type="radio" name="IsCurrent" id="old" value="false"/>
-				} else {
-					<input type="radio" name="IsCurrent" id="current" value="true"/>
-					<input type="radio" name="IsCurrent" id="old" value="false" checked/>
-				}
-			</label>
-		</p>
+	
 		<p>
 			<label { "for" }="StartYear">
 				StartYear
@@ -67,21 +55,58 @@ templ EditJob(old files.Job) {
 				<input name="StartMonth" id="StartMonth" value={ old.StartMonth }/>
 			</label>
 		</p>
-		<div/
-		<p>
-			<label { "for" }="EndYear">
-				EndYear
+			<p>
+			<label { "for" }="IsCurrent">
+				IsCurrent
 				<br/>
-				<input name="EndYear" id="EndYear" value={ old.EndYear }/>
+				if old.IsCurrent {
+					<label { "for" }="current">Yes</label>
+					<input type="radio" name="IsCurrent" id="current" value="true" onClick="window.formjobend.hidden = true" checked/>
+					<label { "for" }="old">No</label>
+					<input type="radio" name="IsCurrent" id="old" value="false" onClick="window.formjobend.hidden = false"/>
+				} else {
+					<label { "for" }="current">Yes</label>
+					<input type="radio" name="IsCurrent" id="current" value="true" onClick="window.formjobend.hidden = true"/>
+					<label { "for" }="old">No</label>
+					<input type="radio" name="IsCurrent" id="old" value="false" onClick="window.formjobend.hidden = false" checked/>
+				}
 			</label>
 		</p>
-		<p>
-			<label { "for" }="EndMonth">
-				EndMonth
-				<br/>
-				<input name="EndMonth" id="EndMonth" value={ old.EndMonth }/>
-			</label>
-		</p>
+		if old.IsCurrent {
+			<div id="formjobend">
+				<p>
+					<label { "for" }="EndYear">
+						EndYear
+						<br/>
+						<input name="EndYear" id="EndYear" value=""/>
+					</label>
+				</p>
+				<p>
+					<label { "for" }="EndMonth">
+						EndMonth
+						<br/>
+						<input name="EndMonth" id="EndMonth" value=""/>
+					</label>
+				</p>
+			</div>
+		} else {
+			<div id="formjobend">
+				<p>
+					<label { "for" }="EndYear">
+						EndYear
+						<br/>
+						<input name="EndYear" id="EndYear" value={ *old.EndYear }/>
+					</label>
+				</p>
+				<p>
+					<label { "for" }="EndMonth">
+						EndMonth
+						<br/>
+						<input name="EndMonth" id="EndMonth" value={ *old.EndMonth }/>
+					</label>
+				</p>
+			</div>
+		}
 		<p>
 			<label { "for" }="Highlights">
 				highlights
