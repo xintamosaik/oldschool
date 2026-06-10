@@ -40,22 +40,21 @@ templ EditJob(old files.Job) {
 				<input type="text" name="Role" id="Role" value={ old.Role }/>
 			</label>
 		</p>
-	
 		<p>
 			<label { "for" }="StartYear">
 				StartYear
 				<br/>
-				<input name="StartYear" id="StartYear" value={ old.StartYear }/>
+				<input type="number" name="StartYear" id="StartYear" value={ old.StartYear }/>
 			</label>
 		</p>
 		<p>
 			<label { "for" }="StartMonth">
 				StartMonth
 				<br/>
-				<input name="StartMonth" id="StartMonth" value={ old.StartMonth }/>
+				<input type="number" min="1" max="12" name="StartMonth" id="StartMonth" value={ old.StartMonth }/>
 			</label>
 		</p>
-			<p>
+		<p>
 			<label { "for" }="IsCurrent">
 				IsCurrent
 				<br/>
@@ -78,14 +77,14 @@ templ EditJob(old files.Job) {
 					<label { "for" }="EndYear">
 						EndYear
 						<br/>
-						<input name="EndYear" id="EndYear" value=""/>
+						<input type="number" name="EndYear" id="EndYear" value=""/>
 					</label>
 				</p>
 				<p>
 					<label { "for" }="EndMonth">
 						EndMonth
 						<br/>
-						<input name="EndMonth" id="EndMonth" value=""/>
+						<input type="number" min="1" max="12" name="EndMonth" id="EndMonth" value=""/>
 					</label>
 				</p>
 			</div>
@@ -95,14 +94,14 @@ templ EditJob(old files.Job) {
 					<label { "for" }="EndYear">
 						EndYear
 						<br/>
-						<input name="EndYear" id="EndYear" value={ *old.EndYear }/>
+						<input type="number" name="EndYear" id="EndYear" value={ *old.EndYear }/>
 					</label>
 				</p>
 				<p>
 					<label { "for" }="EndMonth">
 						EndMonth
 						<br/>
-						<input name="EndMonth" id="EndMonth" value={ *old.EndMonth }/>
+						<input type="number" min="1" max="12" name="EndMonth" id="EndMonth" value={ *old.EndMonth }/>
 					</label>
 				</p>
 			</div>
