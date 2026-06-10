@@ -26,7 +26,11 @@ func JobUpdate(updated Job){
 }
 
 func JobRead(id string) Job{
-	jobs := ExperienceRead()
-	return jobs[0]
+	for _, job := range ExperienceRead() {
+		if job.ID == id {
+			return job
+		}
+	}
+	return Job{} // Fallback
 }
  

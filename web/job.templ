@@ -4,19 +4,21 @@ import (
 	"net/http"
 	"strconv"
 	"templeruins/core"
+	"log"
 	"templeruins/persistence/files"
 )
 
 var job = core.JobRead("0")
 
 func handleEditJob(w http.ResponseWriter, r *http.Request) {
-	id := r.FormValue("ID")
+	id := r.PathValue("id")
+	log.Println(id)
 	EditJob(core.JobRead(id)).Render(r.Context(), w)
 }
 
 templ EditJob(old files.Job) {
 	<form hx-post="/cv/update/job" hx-target="form" hx-swap="outerHTML">
-		<input type="hidden" value={ old.ID }/>
+		<input type="hidden" name="ID" value={ old.ID }/>
 		<p>
 			<label { "for" }="Company">
 				Company
@@ -65,6 +67,7 @@ templ EditJob(old files.Job) {
 				<input name="StartMonth" id="StartMonth" value={ old.StartMonth }/>
 			</label>
 		</p>
+		<div/
 		<p>
 			<label { "for" }="EndYear">
 				EndYear
