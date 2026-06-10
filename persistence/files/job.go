@@ -25,7 +25,7 @@ func JobUpdate(updated Job){
 
 }
 
-func JobRead(id int) Job{
+func JobRead(id string) Job{
 	jobs := ExperienceRead()
 	return jobs[0]
 }

@@ -7,7 +7,7 @@ import (
 	"templeruins/persistence/files"
 )
 
-var job = core.JobRead(1)
+var job = core.JobRead("0")
 
 func handleEditJob(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("ID")
@@ -40,16 +40,13 @@ templ EditJob(old files.Job) {
 		</p>
 		<p>
 			<label { "for" }="IsCurrent">
-				IsCurrent { old.IsCurrent }
+				IsCurrent
 				<br/>
 				if old.IsCurrent {
 					<input type="radio" name="IsCurrent" id="current" value="true" checked/>
-				} else {
-					<input type="radio" name="IsCurrent" id="current" value="true"/>
-				}
-				if old.IsCurrent {
 					<input type="radio" name="IsCurrent" id="old" value="false"/>
 				} else {
+					<input type="radio" name="IsCurrent" id="current" value="true"/>
 					<input type="radio" name="IsCurrent" id="old" value="false" checked/>
 				}
 			</label>

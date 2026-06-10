@@ -2,7 +2,7 @@ package files
 
 import (
 	"encoding/json"
-	"fmt"
+ 
 	"log"
 	"crypto/rand"
 	"encoding/hex"
@@ -25,8 +25,7 @@ func jsonRead(file string) []Job {
 		log.Printf("Error unmarshaling json from %s: %s", file, err)
 		return []Job{}
 	}
-	
-	fmt.Println(res)
+	 
 	return res
 }
 // jsonWrite now wraps the []Job back into an Experience struct before marshaling
