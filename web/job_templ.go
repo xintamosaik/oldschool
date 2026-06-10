@@ -379,7 +379,7 @@ func EditJob(old files.Job) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		for _, item := range old.Highlights {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "- ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "+ ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

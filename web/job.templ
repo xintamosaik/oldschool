@@ -112,7 +112,7 @@ templ EditJob(old files.Job) {
 				<br/>
 				<textarea cols="80" rows="7" name="Highlights" id="Highlights">
 					for _, item := range old.Highlights {
-						- { item }
+						+ { item }
 					}
 				</textarea>
 			</label>
@@ -144,8 +144,8 @@ func handleUpdateJob(w http.ResponseWriter, r *http.Request) {
 		IsCurrent:  isCurrent,
 		StartYear:  startYear,
 		StartMonth: startMonth,
-		EndYear:    endYear, 
-		EndMonth:   endMonth, 
+		EndYear:    endYear,
+		EndMonth:   endMonth,
 		Highlights: highlights,
 	}
 
@@ -154,13 +154,11 @@ func handleUpdateJob(w http.ResponseWriter, r *http.Request) {
 	Job(job).Render(r.Context(), w)
 }
 
- 
 func init() {
 	http.HandleFunc("/cv/edit/{id}/job", handleEditJob)
 	http.HandleFunc("/cv/update/job", handleUpdateJob)
 }
 
- 
 templ Job(job files.Job) {
 	<div class="job entry" hx-post={ "/cv/edit/" + job.ID + "/job" } hx-trigger="click" hx-swap="outerHTML">
 		<h3>
@@ -170,7 +168,7 @@ templ Job(job files.Job) {
 		</h3>
 		<h4>
 			<span>{ strconv.Itoa(job.StartMonth) }/{ strconv.Itoa(job.StartYear) }</span> - 
-			<span>{ strconv.Itoa(job.EndMonth) }/{ strconv.Itoa(job.EndYear) }</span> 
+			<span>{ strconv.Itoa(job.EndMonth) }/{ strconv.Itoa(job.EndYear) }</span>
 			<span class="dash"></span>
 			<span>{ job.Location }</span>
 		</h4>
