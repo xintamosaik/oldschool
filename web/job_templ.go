@@ -398,20 +398,62 @@ func EditJob(old files.Job) templ.Component {
 }
 
 func handleUpdateJob(w http.ResponseWriter, r *http.Request) {
-
+	// 1. Parse standard primitive fields
+	id := r.FormValue("ID")
+	company := r.FormValue("Company")   // Swapped out "subject" for descriptive naming
+	location := r.FormValue("Location") // Swapped out "message"
+	role := r.FormValue("Role")
 	isCurrent := r.FormValue("isCurrent") == "true"
 
-	job := files.Job{
-		ID:        r.FormValue("ID"),
-		Company:   r.FormValue("subject"),
-		Location:  r.FormValue("message"),
-		Role:      r.FormValue("Role"),
-		IsCurrent: isCurrent,
+	startYear, _ := strconv.Atoi(r.FormValue("startYear"))
+	startMonth, _ := strconv.Atoi(r.FormValue("startMonth"))
+
+	// 2. Idiomatically parse optional Pointer fields (*int and *int)
+	var endYearPtr *int
+	var endMonthPtr *int
+
+	// Only attempt to parse end dates if it's not your current job
+	if !isCurrent {
+		if yearVal := r.FormValue("endYear"); yearVal != "" {
+			if parsedYear, err := strconv.Atoi(yearVal); err == nil {
+				endYearPtr = &parsedYear // Take the address of the local variable
+			}
+		}
+
+		if monthVal := r.FormValue("endMonth"); monthVal != "" {
+			if parsedMonth, err := strconv.Atoi(monthVal); err == nil {
+				endMonthPtr = &parsedMonth
+			}
+		}
 	}
 
-	core.JobUpdate(job)
+	// 3. Construct your clean domain block
+	job := files.Job{
+		ID:         id,
+		Company:    company,
+		Location:   location,
+		Role:       role,
+		IsCurrent:  isCurrent,
+		StartYear:  startYear,
+		StartMonth: startMonth,
+		EndYear:    endYearPtr,               // Will be nil if current, or hold the memory pointer
+		EndMonth:   endMonthPtr,              // Will be nil if current, or hold the memory pointer
+		Highlights: currentJobHighlights(id), // Helper to make sure highlights aren't lost
+	}
 
+	// 4. Update and stream the component update back to HTMX
+	core.JobUpdate(job)
 	Job(job).Render(r.Context(), w)
+}
+
+// A crucial helper for HTML forms updating arrays
+func currentJobHighlights(id string) []string {
+	// Because standard HTML text inputs inside your edit form don't easily
+	// submit an array of sub-strings unless you handle special input indexing,
+	// pulling your existing highlights from disk protects you from accidentally
+	// wiping your resume's bullet points when saving changes to the header details.
+	currentJob := core.JobRead(id)
+	return currentJob.Highlights
 }
 
 func init() {
@@ -456,7 +498,7 @@ func Job(job files.Job) templ.Component {
 		var templ_7745c5c3_Var27 string
 		templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.ResolveAttributeValue("/cv/edit/" + job.ID + "/job")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/job.templ`, Line: 156, Col: 63}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/job.templ`, Line: 198, Col: 63}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var27)
 		if templ_7745c5c3_Err != nil {
@@ -469,7 +511,7 @@ func Job(job files.Job) templ.Component {
 		var templ_7745c5c3_Var28 string
 		templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(job.Role)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/job.templ`, Line: 158, Col: 19}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/job.templ`, Line: 200, Col: 19}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 		if templ_7745c5c3_Err != nil {
@@ -482,7 +524,7 @@ func Job(job files.Job) templ.Component {
 		var templ_7745c5c3_Var29 string
 		templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(job.Company)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/job.templ`, Line: 160, Col: 22}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/job.templ`, Line: 202, Col: 22}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
 		if templ_7745c5c3_Err != nil {
@@ -495,7 +537,7 @@ func Job(job files.Job) templ.Component {
 		var templ_7745c5c3_Var30 string
 		templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(job.StartMonth))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/job.templ`, Line: 163, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/job.templ`, Line: 205, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
 		if templ_7745c5c3_Err != nil {
@@ -508,7 +550,7 @@ func Job(job files.Job) templ.Component {
 		var templ_7745c5c3_Var31 string
 		templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(job.StartYear))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/job.templ`, Line: 163, Col: 71}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/job.templ`, Line: 205, Col: 71}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var31))
 		if templ_7745c5c3_Err != nil {
@@ -521,7 +563,7 @@ func Job(job files.Job) templ.Component {
 		var templ_7745c5c3_Var32 string
 		templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(formatEndDate(job))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/job.templ`, Line: 164, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/job.templ`, Line: 206, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var32))
 		if templ_7745c5c3_Err != nil {
@@ -534,7 +576,7 @@ func Job(job files.Job) templ.Component {
 		var templ_7745c5c3_Var33 string
 		templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(job.Location)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/job.templ`, Line: 166, Col: 23}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/job.templ`, Line: 208, Col: 23}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
 		if templ_7745c5c3_Err != nil {

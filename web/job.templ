@@ -122,20 +122,62 @@ templ EditJob(old files.Job) {
 }
 
 func handleUpdateJob(w http.ResponseWriter, r *http.Request) {
-
+	// 1. Parse standard primitive fields
+	id := r.FormValue("ID")
+	company := r.FormValue("Company")   // Swapped out "subject" for descriptive naming
+	location := r.FormValue("Location") // Swapped out "message"
+	role := r.FormValue("Role")
 	isCurrent := r.FormValue("isCurrent") == "true"
 
-	job := files.Job{
-		ID:        r.FormValue("ID"),
-		Company:   r.FormValue("subject"),
-		Location:  r.FormValue("message"),
-		Role:      r.FormValue("Role"),
-		IsCurrent: isCurrent,
+	startYear, _ := strconv.Atoi(r.FormValue("startYear"))
+	startMonth, _ := strconv.Atoi(r.FormValue("startMonth"))
+
+	// 2. Idiomatically parse optional Pointer fields (*int and *int)
+	var endYearPtr *int
+	var endMonthPtr *int
+
+	// Only attempt to parse end dates if it's not your current job
+	if !isCurrent {
+		if yearVal := r.FormValue("endYear"); yearVal != "" {
+			if parsedYear, err := strconv.Atoi(yearVal); err == nil {
+				endYearPtr = &parsedYear // Take the address of the local variable
+			}
+		}
+
+		if monthVal := r.FormValue("endMonth"); monthVal != "" {
+			if parsedMonth, err := strconv.Atoi(monthVal); err == nil {
+				endMonthPtr = &parsedMonth
+			}
+		}
 	}
 
-	core.JobUpdate(job)
+	// 3. Construct your clean domain block
+	job := files.Job{
+		ID:         id,
+		Company:    company,
+		Location:   location,
+		Role:       role,
+		IsCurrent:  isCurrent,
+		StartYear:  startYear,
+		StartMonth: startMonth,
+		EndYear:    endYearPtr,               // Will be nil if current, or hold the memory pointer
+		EndMonth:   endMonthPtr,              // Will be nil if current, or hold the memory pointer
+		Highlights: currentJobHighlights(id), // Helper to make sure highlights aren't lost
+	}
 
+	// 4. Update and stream the component update back to HTMX
+	core.JobUpdate(job)
 	Job(job).Render(r.Context(), w)
+}
+
+// A crucial helper for HTML forms updating arrays
+func currentJobHighlights(id string) []string {
+	// Because standard HTML text inputs inside your edit form don't easily
+	// submit an array of sub-strings unless you handle special input indexing,
+	// pulling your existing highlights from disk protects you from accidentally
+	// wiping your resume's bullet points when saving changes to the header details.
+	currentJob := core.JobRead(id)
+	return currentJob.Highlights
 }
 
 func init() {
