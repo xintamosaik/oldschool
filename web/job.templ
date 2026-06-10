@@ -44,7 +44,7 @@ templ EditJob(old files.Job) {
 			<label { "for" }="StartYear">
 				StartYear
 				<br/>
-				<input type="number" name="StartYear" id="StartYear" value={ old.StartYear }/>
+				<input type="number" min="1900" max="9999" name="StartYear" id="StartYear" value={ old.StartYear }/>
 			</label>
 		</p>
 		<p>
@@ -77,7 +77,7 @@ templ EditJob(old files.Job) {
 					<label { "for" }="EndYear">
 						EndYear
 						<br/>
-						<input type="number" name="EndYear" id="EndYear" value=""/>
+						<input type="number" min="1900" max="9999" name="EndYear" id="EndYear" value=""/>
 					</label>
 				</p>
 				<p>
@@ -94,7 +94,7 @@ templ EditJob(old files.Job) {
 					<label { "for" }="EndYear">
 						EndYear
 						<br/>
-						<input type="number" name="EndYear" id="EndYear" value={ *old.EndYear }/>
+						<input type="number" min="1900" max="9999" name="EndYear" id="EndYear" value={ *old.EndYear }/>
 					</label>
 				</p>
 				<p>
