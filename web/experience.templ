@@ -9,9 +9,9 @@ templ Experience(experience []files.Job) {
 	<section id="experience">
 		<h2>Experience</h2>
 		for _, item := range experience {
-			<li>
+			<div>
 				@Job(item)
-			</li>
+			</div>
 		}
 	</section>
 }
