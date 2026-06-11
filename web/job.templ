@@ -43,69 +43,48 @@ templ EditJob(old files.Job) {
 		<p>
 			<label { "for" }="StartYear">
 				StartYear
-				<br/>
+				<br />
 				<input type="number" min="1900" max="9999" name="StartYear" id="StartYear" value={ old.StartYear }/>
 			</label>
 		</p>
 		<p>
 			<label { "for" }="StartMonth">
 				StartMonth
-				<br/>
+				<br />
 				<input type="number" min="1" max="12" name="StartMonth" id="StartMonth" value={ old.StartMonth }/>
 			</label>
 		</p>
 		<p>
 			<label { "for" }="IsCurrent">
 				IsCurrent
-				<br/>
-				if old.IsCurrent {
-					<label { "for" }="current">Yes</label>
-					<input type="radio" name="IsCurrent" id="current" value="true" onClick="window.formjobend.hidden = true" checked/>
-					<label { "for" }="old">No</label>
-					<input type="radio" name="IsCurrent" id="old" value="false" onClick="window.formjobend.hidden = false"/>
-				} else {
-					<label { "for" }="current">Yes</label>
-					<input type="radio" name="IsCurrent" id="current" value="true" onClick="window.formjobend.hidden = true"/>
-					<label { "for" }="old">No</label>
-					<input type="radio" name="IsCurrent" id="old" value="false" onClick="window.formjobend.hidden = false" checked/>
-				}
+				<br />
+				 
+				<label { "for" }="current">Yes</label>
+				<input type="radio" name="IsCurrent" id="current" value="true" onClick="window.formjobend.hidden = true" if old.IsCurrent { checked }/>
+				<label { "for" }="old">No</label>
+				<input type="radio" name="IsCurrent" id="old" value="false" onClick="window.formjobend.hidden = false" if old.IsCurrent == false { checked }/>
+				 
 			</label>
 		</p>
-		if old.IsCurrent {
-			<div id="formjobend" hidden>
-				<p>
-					<label { "for" }="EndYear">
-						EndYear
-						<br/>
-						<input type="number" min="1900" max="9999" name="EndYear" id="EndYear" value=""/>
-					</label>
-				</p>
-				<p>
-					<label { "for" }="EndMonth">
-						EndMonth
-						<br/>
-						<input type="number" min="1" max="12" name="EndMonth" id="EndMonth" value=""/>
-					</label>
-				</p>
-			</div>
-		} else {
-			<div id="formjobend">
-				<p>
-					<label { "for" }="EndYear">
-						EndYear
-						<br/>
-						<input type="number" min="1900" max="9999" name="EndYear" id="EndYear" value={ old.EndYear }/>
-					</label>
-				</p>
-				<p>
-					<label { "for" }="EndMonth">
-						EndMonth
-						<br/>
-						<input type="number" min="1" max="12" name="EndMonth" id="EndMonth" value={ old.EndMonth }/>
-					</label>
-				</p>
-			</div>
-		}
+	 
+		
+		<div id="formjobend" if old.IsCurrent { hidden }>
+			<p>
+				<label { "for" }="EndYear">
+					EndYear
+					<br/>
+					<input type="number" min="1900" max="9999" name="EndYear" id="EndYear" value={ old.EndYear }/>
+				</label>
+			</p>
+			<p>
+				<label { "for" }="EndMonth">
+					EndMonth
+					<br/>
+					<input type="number" min="1" max="12" name="EndMonth" id="EndMonth" value={ old.EndMonth }/>
+				</label>
+			</p>
+		</div>
+		 
 		<p>
 			<label { "for" }="Highlights">
 				highlights
