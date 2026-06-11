@@ -200,7 +200,15 @@ func init() {
 	http.HandleFunc("/cv/edit/{id}/job", handleEditJob)
 	http.HandleFunc("/cv/update/job", handleUpdateJob)
 }
+templ jobEnd(month int, year int, isCurrent bool ) {
+	if isCurrent {
+		<span>now</span>
+	} else {
+		<span>{ strconv.Itoa(job.EndMonth) }/{ strconv.Itoa(job.EndYear) }</span>
+	}
 
+	
+}
 templ Job(job files.Job) {
 	<div class="job entry" hx-post={ "/cv/edit/" + job.ID + "/job" } hx-trigger="click" hx-swap="outerHTML">
 		<h3>
@@ -210,9 +218,10 @@ templ Job(job files.Job) {
 		</h3>
 		<h4>
 			<span>{ strconv.Itoa(job.StartMonth) }/{ strconv.Itoa(job.StartYear) }</span> - 
-			<span>{ strconv.Itoa(job.EndMonth) }/{ strconv.Itoa(job.EndYear) }</span>
+			@jobEnd(job.EndMonth, job.EndYear, job.IsCurrent)
 			<span class="dash"></span>
 			<span>{ job.Location }</span>
+			
 		</h4>
 		<ul>
 			for _, item := range job.Highlights {
