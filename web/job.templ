@@ -34,103 +34,131 @@ templ location(location string) {
 
 templ role(role string) {
 	<label { "for" }="Role">
-			Role
-			<br/>
-			<input type="text" name="Role" id="Role" value={ role }/>
-		</label>
+		Role
+		<br/>
+		<input type="text" name="Role" id="Role" value={ role }/>
+	</label>
+}
+
+templ startYear(startYear int) {
+	<label { "for" }="StartYear">
+		StartYear
+		<br/>
+		<input type="number" min="1900" max="9999" name="StartYear" id="StartYear" value={ startYear }/>
+	</label>
+}
+
+templ startMonth(startMonth int) {
+	<label { "for" }="StartMonth">
+		StartMonth
+		<br/>
+		<input type="number" min="1" max="12" name="StartMonth" id="StartMonth" value={ startMonth }/>
+	</label>
+}
+
+templ isCurrent(isCurrent bool) {
+	<label { "for" }="IsCurrent">
+		IsCurrent
+		<br/>
+		<label { "for" }="current">Yes</label>
+		<input
+			type="radio"
+			name="IsCurrent"
+			id="current"
+			value="true"
+			onClick="window.formjobend.hidden = true"
+			if isCurrent {
+				checked
+			}
+		/>
+		<label { "for" }="old">No</label>
+		<input
+			type="radio"
+			name="IsCurrent"
+			id="old"
+			value="false"
+			onClick="window.formjobend.hidden = false"
+			if isCurrent == false {
+				checked
+			}
+		/>
+	</label>
+}
+
+templ endYear(endYear int) {
+	<label { "for" }="EndYear">
+		EndYear
+		<br/>
+		<input type="number" min="1900" max="9999" name="EndYear" id="EndYear" value={ endYear }/>
+	</label>
+}
+
+templ endMonth(endMonth int) {
+	<label { "for" }="EndYear">
+		EndYear
+		<br/>
+		<input type="number" min="1" max="12" name="EndMonth" id="EndMonth" value={ endMonth }/>
+	</label>
+}
+
+templ highlights(highlights []string) {
+	<label { "for" }="Highlights">
+		highlights
+		<br/>
+		<textarea cols="80" rows="7" name="Highlights" id="Highlights">
+			for _, item := range highlights {
+				+ { item }
+			}
+		</textarea>
+	</label>
 }
 
 templ EditJob(old files.Job) {
 	<form id={ "job-" + old.ID } hx-post="/cv/update/job" hx-target="form" hx-swap="outerHTML">
 		<input type="hidden" name="ID" value={ old.ID }/>
 		<div>
-			@company(old.Company) 
+			@company(old.Company)
 		</div>
-		<br>
+		<br/>
 		<div>
 			@location(old.Location)
 		</div>
-		<br>
+		<br/>
 		<div>
-		
+			@role(old.Role)
 		</div>
-		<br>
+		<br/>
 		<div>
-			<label { "for" }="StartYear">
-				StartYear
-				<br/>
-				<input type="number" min="1900" max="9999" name="StartYear" id="StartYear" value={ old.StartYear }/>
-			</label>
+			@startYear(old.StartYear)
 		</div>
-		<br>
+		<br/>
 		<div>
-			<label { "for" }="StartMonth">
-				StartMonth
-				<br/>
-				<input type="number" min="1" max="12" name="StartMonth" id="StartMonth" value={ old.StartMonth }/>
-			</label>
+			@startMonth(old.StartMonth)
 		</div>
-		<br>
+		<br/>
 		<div>
-			<label { "for" }="IsCurrent">
-				IsCurrent
-				<br/>
-				<label { "for" }="current">Yes</label>
-				<input
-					type="radio"
-					name="IsCurrent"
-					id="current"
-					value="true"
-					onClick="window.formjobend.hidden = true"
-					if old.IsCurrent {
-						checked
-					}
-				/>
-				<label { "for" }="old">No</label>
-				<input
-					type="radio"
-					name="IsCurrent"
-					id="old"
-					value="false"
-					onClick="window.formjobend.hidden = false"
-					if old.IsCurrent == false {
-						checked
-					}
-				/>
-			</label>
+			@isCurrent(old.IsCurrent)
 		</div>
+		<br/>
 		<div
 			id="formjobend"
 			if old.IsCurrent {
 				hidden
 			}
 		>
-			<p>
-				<label { "for" }="EndYear">
-					EndYear
-					<br/>
-					<input type="number" min="1900" max="9999" name="EndYear" id="EndYear" value={ old.EndYear }/>
-				</label>
-			</p>
-			<p>
-				<label { "for" }="EndMonth">
-					EndMonth
-					<br/>
-					<input type="number" min="1" max="12" name="EndMonth" id="EndMonth" value={ old.EndMonth }/>
-				</label>
-			</p>
+			<div>
+				@endYear(old.EndYear)
+			</div>
+			<br/>
+			<div>
+				@endMonth(old.EndMonth)
+			</div>
 		</div>
-		<p>
-			<label { "for" }="Highlights">
-				highlights
-				<br/>
-				<textarea cols="80" rows="7" name="Highlights" id="Highlights">
-					for _, item := range old.Highlights {
-						+ { item }
-					}
-				</textarea>
-			</label>
-		</p>
+		<br/>
+		<div>
+			@highlights(old.Highlights)
+		</div>
+		<br/>
 		<button type="submit">Submit</button>
 	</form>
 }
