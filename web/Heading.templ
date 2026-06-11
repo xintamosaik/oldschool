@@ -1,0 +1,14 @@
+package web
+
+import "templeruins/core"
+
+templ Heading() {
+	<section id="title">
+		<h1>
+			@Name(core.NameRead())
+			<span class="dash"></span>
+			@Title(core.TitleRead())
+		</h1>
+	</section>
+}
+

@@ -1,9 +1,9 @@
 package files
 
-func RoleSave(text string) {
-	lineSave(text, "role.txt")
+func TitleSave(text string) {
+	lineSave(text, "title.txt")
 }
 
-func RoleRead() string {
-	return lineRead("role.txt")
+func TitleRead() string {
+	return lineRead("title.txt")
 }

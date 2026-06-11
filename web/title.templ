@@ -1,14 +1,33 @@
 package web
 
-import "templeruins/core"
+import (
+	"net/http"
+	"templeruins/core"
+)
 
-templ Title() {
-	<section id="title">
-		<h1>
-			@Name(core.NameRead())
-			<span class="dash"></span>
-			@Role(core.RoleRead())
-		</h1>
-	</section>
+var title = "SOFTWARE ENGINEER (FULL-STACK / TYPESCRIPT)"
+
+func handleEditTitle(w http.ResponseWriter, r *http.Request) {
+	EditTitle(title).Render(r.Context(), w)
 }
 
+templ EditTitle(old string) {
+	<form hx-post="/cv/update/title" hx-target="form" hx-swap="outerHTML">
+		<input name="title" id="title" value={ old }/>
+	</form>
+}
+
+func handleUpdateTitle(w http.ResponseWriter, r *http.Request) {
+	new := r.FormValue("title")
+	core.TitleSave(new)
+	Title(new).Render(r.Context(), w)
+}
+
+templ Title(current string) {
+	<span hx-post="/cv/edit/title" hx-trigger="click" hx-swap="outerHTML">{ current } </span>
+}
+
+func init() {
+	http.HandleFunc("/cv/edit/title", handleEditTitle)
+	http.HandleFunc("/cv/update/title", handleUpdateTitle)
+}

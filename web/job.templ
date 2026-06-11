@@ -16,59 +16,95 @@ func handleEditJob(w http.ResponseWriter, r *http.Request) {
 	EditJob(core.JobRead(id)).Render(r.Context(), w)
 }
 
+templ company(company string) {
+	<label { "for" }="Company">
+		Company
+		<br/>
+		<input type="text" name="Company" id="Company" value={ company }/>
+	</label>
+}
+
+templ location(location string) {
+	<label { "for" }="Location">
+		Location
+		<br/>
+		<input type="text" name="Location" id="Location" value={ location }/>
+	</label>
+}
+
+templ role(role string) {
+	<label { "for" }="Role">
+			Role
+			<br/>
+			<input type="text" name="Role" id="Role" value={ role }/>
+		</label>
+}
+
 templ EditJob(old files.Job) {
-	<form hx-post="/cv/update/job" hx-target="form" hx-swap="outerHTML">
+	<form id={ "job-" + old.ID } hx-post="/cv/update/job" hx-target="form" hx-swap="outerHTML">
 		<input type="hidden" name="ID" value={ old.ID }/>
-		<p>
-			<label { "for" }="Company">
-				Company
-				<br/>
-				<input type="text" name="Company" id="Company" value={ old.Company }/>
-			</label>
-		</p>
-		<p>
-			<label { "for" }="Location">
-				Location
-				<br/>
-				<input type="text" name="Location" id="Location" value={ old.Location }/>
-			</label>
-		</p>
-		<p>
-			<label { "for" }="Role">
-				Role
-				<br/>
-				<input type="text" name="Role" id="Role" value={ old.Role }/>
-			</label>
-		</p>
-		<p>
+		<div>
+			@company(old.Company) 
+		</div>
+		<br>
+		<div>
+			@location(old.Location)
+		</div>
+		<br>
+		<div>
+		
+		</div>
+		<br>
+		<div>
 			<label { "for" }="StartYear">
 				StartYear
-				<br />
+				<br/>
 				<input type="number" min="1900" max="9999" name="StartYear" id="StartYear" value={ old.StartYear }/>
 			</label>
-		</p>
-		<p>
+		</div>
+		<br>
+		<div>
 			<label { "for" }="StartMonth">
 				StartMonth
-				<br />
+				<br/>
 				<input type="number" min="1" max="12" name="StartMonth" id="StartMonth" value={ old.StartMonth }/>
 			</label>
-		</p>
-		<p>
+		</div>
+		<br>
+		<div>
 			<label { "for" }="IsCurrent">
 				IsCurrent
-				<br />
-				 
+				<br/>
 				<label { "for" }="current">Yes</label>
-				<input type="radio" name="IsCurrent" id="current" value="true" onClick="window.formjobend.hidden = true" if old.IsCurrent { checked }/>
+				<input
+					type="radio"
+					name="IsCurrent"
+					id="current"
+					value="true"
+					onClick="window.formjobend.hidden = true"
+					if old.IsCurrent {
+						checked
+					}
+				/>
 				<label { "for" }="old">No</label>
-				<input type="radio" name="IsCurrent" id="old" value="false" onClick="window.formjobend.hidden = false" if old.IsCurrent == false { checked }/>
-				 
+				<input
+					type="radio"
+					name="IsCurrent"
+					id="old"
+					value="false"
+					onClick="window.formjobend.hidden = false"
+					if old.IsCurrent == false {
+						checked
+					}
+				/>
 			</label>
-		</p>
-	 
-		
-		<div id="formjobend" if old.IsCurrent { hidden }>
+		</div>
+		<div
+			id="formjobend"
+			if old.IsCurrent {
+				hidden
+			}
+		>
 			<p>
 				<label { "for" }="EndYear">
 					EndYear
@@ -84,7 +120,6 @@ templ EditJob(old files.Job) {
 				</label>
 			</p>
 		</div>
-		 
 		<p>
 			<label { "for" }="Highlights">
 				highlights
