@@ -114,7 +114,7 @@ templ highlights(highlights []string) {
 }
 
 templ EditJob(old files.Job) {
-	<form id={ "job-" + old.ID } hx-post="/cv/update/job" hx-target="form" hx-swap={ "#job-" + old.ID }>
+	<form id={ "job-" + old.ID } hx-post="/cv/update/job" hx-target={ "#job-" + old.ID } hx-swap="outerHTML">
 		<input type="hidden" name="ID" value={ old.ID }/>
 		<div>
 			@company(old.Company)
@@ -200,15 +200,15 @@ func init() {
 	http.HandleFunc("/cv/edit/{id}/job", handleEditJob)
 	http.HandleFunc("/cv/update/job", handleUpdateJob)
 }
-templ jobEnd(month int, year int, isCurrent bool ) {
+
+templ jobEnd(month int, year int, isCurrent bool) {
 	if isCurrent {
 		<span>now</span>
 	} else {
 		<span>{ strconv.Itoa(job.EndMonth) }/{ strconv.Itoa(job.EndYear) }</span>
 	}
-
-	
 }
+
 templ Job(job files.Job) {
 	<div class="job entry" hx-post={ "/cv/edit/" + job.ID + "/job" } hx-trigger="click" hx-swap="outerHTML">
 		<h3>
@@ -221,7 +221,6 @@ templ Job(job files.Job) {
 			@jobEnd(job.EndMonth, job.EndYear, job.IsCurrent)
 			<span class="dash"></span>
 			<span>{ job.Location }</span>
-			
 		</h4>
 		<ul>
 			for _, item := range job.Highlights {

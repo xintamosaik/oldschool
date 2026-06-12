@@ -1,5 +1,7 @@
 package files
 
+import "log"
+
 type Job struct {
 	ID        string `json:"id"`
 	Role      string `json:"role"`
@@ -24,10 +26,14 @@ func JobAdd(new Job){
 func JobUpdate(updated Job){
 	i := jobFind(updated.ID)
 	if (i < 0) {
+		log.Println(i)
 		return
+	} else {
+		log.Println(i)
 	}
 	experience := ExperienceRead()
 	experience[i] = updated
+	experienceSave(experience)
 }
 
 func jobFind(id string)int {
