@@ -24,13 +24,7 @@ templ company(company string) {
 	</label>
 }
 
-templ location(location string) {
-	<label { "for" }="Location">
-		Location
-		<br/>
-		<input type="text" name="Location" id="Location" value={ location }/>
-	</label>
-}
+
 
 templ role(role string) {
 	<label { "for" }="Role">
@@ -109,7 +103,7 @@ templ EditJob(old files.Job) {
 		</div>
 		<br/>
 		<div>
-			@location(old.Location)
+			@EditLocation(old.Location, old.ID)
 		</div>
 		<br/>
 		<div>
@@ -202,7 +196,7 @@ templ Job(job files.Job) {
 			<span>{ strconv.Itoa(job.StartMonth) }/{ strconv.Itoa(job.StartYear) }</span> - 
 			@jobEnd(job.EndMonth, job.EndYear, job.IsCurrent)
 			<span class="dash"></span>
-			<span>{ job.Location }</span>
+			@ShowLocation(job.Location, job.ID)
 		</h4>
 		<ul>
 			for _, item := range job.Highlights {

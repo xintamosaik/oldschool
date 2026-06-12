@@ -1,0 +1,47 @@
+package web
+
+import (
+	"net/http"
+	"templeruins/core"
+)
+
+templ EditLocation(location string, id string) {
+	<form hx-post={ "/cv/update/job/" + id + "/location" } hx-target="this" hx-swap="outerHTML">
+		<input type="hidden" name="ID" value={ id }/>
+		<label { "for" }="Location">
+			Location
+			<br/>
+			<input
+				type="text"
+				name="Location"
+				id="Location"
+				value={ location }
+			/>
+		</label>
+		<button type="submit">Update</button>
+	</form>
+}
+
+func handleUpdateLocation(w http.ResponseWriter, r *http.Request) {
+	id := r.FormValue("ID")
+	location := r.FormValue("Location")
+
+	core.JobLocationUpdate(id, location)
+	ShowLocation(location, id).Render(r.Context(), w)
+}
+
+templ ShowLocation(location string, id string) {
+	<span hx-post={ "/cv/edit/job/" + id + "/location" } hx-target="this" hx-swap="outerHTML">{ location }</span>
+}
+
+func handleEditLocation(w http.ResponseWriter, r *http.Request) {
+	id := r.FormValue("ID")
+	location := core.JobLocationRead(id)	
+	EditLocation(location, id).Render(r.Context(), w)
+	
+}
+
+func init() {
+	http.HandleFunc("/cv/update/job/{id}/location", handleUpdateLocation)
+	http.HandleFunc("/cv/edit/job/{id}/location", handleEditLocation)
+}
