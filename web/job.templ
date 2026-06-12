@@ -60,7 +60,6 @@ templ isCurrent(isCurrent bool) {
 	<label { "for" }="IsCurrent">
 		Currently working here
 		<br/>
-		 
 		<input
 			type="checkbox"
 			name="IsCurrent"
@@ -71,7 +70,6 @@ templ isCurrent(isCurrent bool) {
 				checked
 			}
 		/>
-		 
 	</label>
 }
 
@@ -159,8 +157,7 @@ func handleUpdateJob(w http.ResponseWriter, r *http.Request) {
 	startMonth, _ := strconv.Atoi(r.FormValue("StartMonth"))
 	endYear, _ := strconv.Atoi(r.FormValue("EndYear"))
 	endMonth, _ := strconv.Atoi(r.FormValue("EndMonth"))
-	log.Println(r.FormValue("Highlights"))
-	highlights:= r.PostForm["Highlights"]
+	highlights := r.PostForm["Highlights"]
 
 	// 3. Construct your clean domain block
 	job := files.Job{
