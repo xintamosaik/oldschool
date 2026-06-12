@@ -47,13 +47,13 @@
     "endYear": 0,
     "endMonth": 0,
     "highlights": [
-                        "**Rebuilt an 8,000+ line legacy invoicing system** into a modular WordPress plugin (q_invoice) using MVC architecture, domain/feature slicing, AJAX-based UX, and modern PHP practices. Achieved full feature parity in ~7 months, introduced multi-language support, custom tax handling, import/export logic, and reduced friction for business stakeholders through faster, dynamic interfaces.",
-                        "**Designed and implemented a flexible internal reporting system** (PHP + Chart.js) that enabled visual filtering across event types, cities, and date ranges — a key decision-making tool praised by the CEO for its usability and depth. Architected for extensensibility, with lazy AJAX rendering and data-driven config logic.",
-                        "**Reduced noise and instability in the admin panel** by fixing 50–70 recurring PHP bugs and cleaning up thousands of warnings. Introduced a lightweight logging system with trace capabilities, restoring error log usability and giving the team visibility into regressions.",
-                        "**Refactored scattered legacy code** (PHP/JS) into modular components with clear boundaries — cutting bug rates by ~40% in key workflows and improving overall developer confidence and responsiveness.",
-                        "**Took initiative to drive peer mentoring** and code quality practices in a chaotic, process-light environment: introduced Discord-based pair programming sessions, launched informal review habits, and promoted better naming, structure, and JS/PHP linting across the team.",
-                        "**Introduced WP_React, JSdoc, ESLint, and static PHP analysis tools** to strengthen reliability and readability. Drove early Docker adoption to enable testability, though the team was not yet ready for full TDD.",
-                        "Used Postman for API development, Adminer for SQL analysis, and **proactively learned unfamiliar tooling to support architectural improvements** on the fly."
+      "**Rebuilt an 8,000+ line legacy invoicing system** into a modular WordPress plugin (q_invoice) using MVC architecture, domain/feature slicing, AJAX-based UX, and modern PHP practices. Achieved full feature parity in ~7 months, introduced multi-language support, custom tax handling, import/export logic, and reduced friction for business stakeholders through faster, dynamic interfaces.",
+      "**Designed and implemented a flexible internal reporting system** (PHP + Chart.js) that enabled visual filtering across event types, cities, and date ranges — a key decision-making tool praised by the CEO for its usability and depth. Architected for extensensibility, with lazy AJAX rendering and data-driven config logic.",
+      "**Reduced noise and instability in the admin panel** by fixing 50–70 recurring PHP bugs and cleaning up thousands of warnings. Introduced a lightweight logging system with trace capabilities, restoring error log usability and giving the team visibility into regressions.",
+      "**Refactored scattered legacy code** (PHP/JS) into modular components with clear boundaries — cutting bug rates by ~40% in key workflows and improving overall developer confidence and responsiveness.",
+      "**Took initiative to drive peer mentoring** and code quality practices in a chaotic, process-light environment: introduced Discord-based pair programming sessions, launched informal review habits, and promoted better naming, structure, and JS/PHP linting across the team.",
+      "**Introduced WP_React, JSdoc, ESLint, and static PHP analysis tools** to strengthen reliability and readability. Drove early Docker adoption to enable testability, though the team was not yet ready for full TDD.",
+      "Used Postman for API development, Adminer for SQL analysis, and **proactively learned unfamiliar tooling to support architectural improvements** on the fly."
     ]
   }
 ]
