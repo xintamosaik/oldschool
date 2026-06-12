@@ -22,7 +22,25 @@ func JobAdd(new Job){
 }
 
 func JobUpdate(updated Job){
+	i := jobFind(updated.ID)
+	if (i < 0) {
+		return
+	}
+	experience := ExperienceRead()
+	experience[i] = updated
+}
 
+func jobFind(id string)int {
+	i := 0
+	for _, job := range ExperienceRead() {
+		if job.ID == id {
+
+			return i
+		}
+		i = i + 1
+	}
+
+	return -1
 }
 
 func JobRead(id string) Job{

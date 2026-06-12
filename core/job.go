@@ -2,8 +2,8 @@ package core
 
 import ("templeruins/persistence/files")
 
-func JobUpdate(new files.Job) {
-	files.JobUpdate(new)
+func JobUpdate(updated files.Job) {
+	files.JobUpdate(updated)
 }
 
 func JobRead(id string)files.Job{
